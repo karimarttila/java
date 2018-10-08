@@ -4,6 +4,7 @@
 # IntelliJ IDEA / PyCharm
 .idea/
 *.iml
+out/
 
 # Generated jsdoc directory
 doc-gen/

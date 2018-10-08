@@ -7,10 +7,17 @@ buildscript {
     }
 }
 
+plugins {
+  id "org.sonarqube" version "2.6.2"
+}
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
+
 
 bootJar {
     baseName = 'simple-server'
@@ -21,8 +28,8 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.10
-targetCompatibility = 1.10
+sourceCompatibility = 10
+targetCompatibility = 10
 
 wrapper {
     gradleVersion = '4.10.2'
