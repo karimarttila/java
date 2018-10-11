@@ -1,9 +1,13 @@
+import org.gradle.internal.jvm.Jvm
+
+import javax.tools.JavaCompiler
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE')
     }
 }
 
@@ -38,13 +42,38 @@ wrapper {
 
 task printMyGradleVersion {
     doLast {
+        final Jvm myJvmVersion = Jvm.current()
         final GradleVersion myGradleVersion = GradleVersion.current()
-        println "Using Gradle version: ${myGradleVersion.version}"
+        println "Using JVM: ${myJvmVersion}, and Gradle: ${myGradleVersion.version}"
     }
 }
 
+
+ext{
+    // Dependencies.
+    // Honor Spring Boot 2.0.5 versions:
+    // https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html
+    jsonVersion = '20180813'
+    groovyVersion = '2.4.15'
+    // Exception here. Spring Boot uses JUnit 4.12, but let's use latest JUnit5.
+    // See: https://dzone.com/articles/spring-boot-2-with-junit-5-and-mockito-2-for-unit
+    junitVersion = '5.2.0'
+    mockitJunitJupiterVersion = '2.18.3'
+}
+
+
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('com.jayway.jsonpath:json-path')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    // NOTE: Use " (not ' ) when referring to variables!
+    compile("org.json:json:$jsonVersion")
+    compile("org.codehaus.groovy:groovy-all:$rootProject.ext.groovyVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testCompile("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testCompile "org.mockito:mockito-core:2.+"
+    testCompile("org.mockito:mockito-junit-jupiter:$mockitJunitJupiterVersion")
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'junit.junit'
+    }
+    
 }

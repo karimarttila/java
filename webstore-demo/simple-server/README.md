@@ -7,6 +7,7 @@
 - [Music](#music)
 - [Gradle](#gradle)
 - [SonarQube](#sonarqube)
+- [Java REPL](#java-repl)
 
 
 ## Introduction
@@ -37,47 +38,56 @@ Gradle wrapper is also provided in this Git repo in [gradle](gradle) directory.
 
 ## SonarQube
 
-You can install [SonarQube](https://www.sonarqube.org/) code quality server to analyze and visualize the code quality of the Java project. Using [Docker](https://www.docker.com/) this is pretty simple and keeps your precious workstation clean. See documentation in the [Docker repository](https://hub.docker.com/_/sonarqube/).
+I created a [Simple SonarQube](https://github.com/karimarttila/docker/tree/master/simple-sonarqube) container for Java 10 projects. I have usually configured [Jenkins](https://jenkins.io/) (see my blog article [Jenkins on AWS](https://medium.com/tieto-developers/jenkins-on-aws-49133e011ac5) if you are interested) and SonarQube servers for my Java projects in which I have been working as a Software Architect - now I wanted to see how easy [SonarQube](https://www.sonarqube.org/) was to used in my local Ubuntu 18 workstation using as a [Docker](https://www.docker.com/) container.
 
-```bash
-cd docker/orig-sonarqube-scripts
-docker pull sonarqube
-docker network create -d bridge sonar
-./start-sonarqube-container.sh
+
+The [build.gradle](build.gradle) file shows how to configure the sonarqube plugin:
+
+```gradle
+plugins {
+  id "org.sonarqube" version "2.6.2"
+}
 ```
 
-Then open browser in http://localhost:9011 , login using admin/admin. Then Adminstration/Marketplace => Update SonarJava to 5.6 version (version 5.2 which comes with SonarQube 7.1 of that Docker version does not support Java 10).
-Then SonarQube says: "SonarQube needs to be restarted in order to
-update 1 plugins" => click "Restart".
+And we also need to configure the SonarQube properties in  [gradle.properties](gradle.properties) file.
 
-Once you have updated and SonarQube is ready run:
-
-```bash
-./commit-docker.sh
+```gradle
+# SonarQube
+systemProp.sonar.host.url=http://localhost:9012
+systemProp.sonar.login=admin
+systemProp.sonar.password=admin
+systemProp.sonar.languages=java
+systemProp.sonar.java.source=10
+systemProp.sonar.java.target=10
 ```
 
-Now you have committed the updated SonarQube version to a new image ss/sonarqube:1.0 (ss as Simple Server, i.e. not as Schutzstaffel).
+Then you are ready to run the analyses.
 
-Next move one directory up to the docker directory.
-
-```bash
-./start-sonarqube-container.sh
-```
-
-Then open browser in http://localhost:9012 (note port 9012 this time). 
-
-Move one directory up again, to simple-server main directory. Run analysis script:
+Example script [run-ss-container-sonarqube-analysis.sh](run-ss-container-sonarqube-analysis.sh) :
 
 ```bash
 ./run-ss-container-sonarqube-analysis.sh
 ```
 
-You can get a bash to the container by:
+## Java REPL
+
+Java 9 introduced a shiny Java REPL for the Java developers)! This is nothing compared to Lisp REPLs but anyway it's nice to have a Java REPL at last. You can start a Java REPL session with command "jshell". 
+
+Here a short Java REPL session to explore how to convert Java HashMap to JSONObject.
 
 ```bash
-exec-bash-in-sonarqube-container.sh
+jshell> /env -class-path /home/kari/.m2/repository/org/json/json/20140107/json-20140107.jar
+|  Setting new options and restoring state.
+jshell> import org.json.JSONObject;
+jshell> Map<String, String> pg = new HashMap<>();
+pg ==> {}
+jshell> pg.put("1", "Movies");
+$3 ==> null
+jshell> pg.put("2", "Books");
+$4 ==> null
+jshell> pg
+pg ==> {1=Movies, 2=Books}
+jshell> JSONObject jPg = new JSONObject(pg);
+jPg ==> {"1":"Movies","2":"Books"}
 ```
 
-NOTE. As the SonarQube UI says: "Embedded database should be used for evaluation purpose only. The embedded database will not scale, it will not support upgrading to newer versions of SonarQube, and there is no support for migrating your data out of it into a different database engine."
-
-So, once you delete the container, your history is gone. Basically I configured this Docker based SonarQube just to make one time quality analysis for my project. Maybe I will install another Sonarqube Docker version which supports database in a Docker volume, so that the history is not gone with the container.

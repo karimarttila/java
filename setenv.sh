@@ -17,8 +17,10 @@ export GRADLE_HOME=/mnt/local/gradle-4.10.2
 echo "GRADLE_HOME="$GRADLE_HOME
 export M2_HOME=/mnt/local/maven-3.5.4
 echo "M2_HOME="$M2_HOME
+export GROOVY_HOME=/mnt/local/groovy-2.4.15
+echo "GROOVY_HOME="$GROOVY_HOME
 export ANT_HOME=/mnt/local/apache-ant-1.10.1
 echo "ANT_HOME="$ANT_HOME
-export PATH=$JAVA_HOME/bin:$GRADLE_HOME/bin:$M2_HOME/bin:$ANT_HOME/bin:$PATH
+export PATH=$JAVA_HOME/bin:$GRADLE_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin:$ANT_HOME/bin:$PATH
 echo "PATH="$PATH
 
