@@ -91,3 +91,39 @@ jshell> JSONObject jPg = new JSONObject(pg);
 jPg ==> {"1":"Movies","2":"Books"}
 ```
 
+This is actually pretty nice and a wellcome addition to Java 9 - now we can test small code snippets like that without creating a bigger testing context.
+
+## Logging
+
+Spring Boot comes with Logback out of the box. Spring Boot should support groovy configuration, and in main side it worked. For some reason in the test side Spring Boot does not recognize logback-test.groovy file and I had to create equivalent logback-test.xml file which was recognized - real weird. If someone figures out the reason for this please tell me. This is a bit of a nuisance since groovy configuration is so much more concise than xml configuration.
+
+## Spring Profiles
+
+Just for demonstration purposes I created two Spring profiles: dev and prod. You can start the script e.g. with dev profile like:
+
+```bash
+java -Dspring.profiles.active=prod --illegal-access=deny -jar build/libs/simple-server-0.1.jar
+```
+
+Dev profile uses file [application-dev.properties](src/main/resources/application-dev.properties) and you run above command you get logs denoting that we are running dev profile ("DEV" in log before "DEBUG", see [logback-env-dev.groovy](src/main/resources/logback-env-dev.groovy) configuration):
+
+```bash
+2018-10-11 23:28:23 1612 [main] DEV DEBUG simpleserver.Core - Running with Spring Boot v2.0.5.RELEASE, Spring v5.0.9.RELEASE 
+20
+```
+
+## JUnit5
+
+Latest Spring Boot that I used writing this was version 2.0.5 which comes with JUnit 4.12. There were major changes in new JUnit5 and I wanted to try those, so I configured [build.gradle](build.gradle) to use JUnit5.
+
+You can run the tests as previously:
+
+```bash
+./gradlew test
+```
+
+If there are no changes in the files, the tests are not run again (unless you give clean task). One way to rerun tests is:
+
+```bash
+./gradlew --rerun-tasks test
+```

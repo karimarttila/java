@@ -1,5 +1,4 @@
 import org.gradle.internal.jvm.Jvm
-
 import javax.tools.JavaCompiler
 
 buildscript {
@@ -11,6 +10,8 @@ buildscript {
     }
 }
 
+
+
 plugins {
   id "org.sonarqube" version "2.6.2"
 }
@@ -20,7 +21,6 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-
 
 
 bootJar {
@@ -68,12 +68,28 @@ dependencies {
     compile("org.json:json:$jsonVersion")
     compile("org.codehaus.groovy:groovy-all:$rootProject.ext.groovyVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")       
     testCompile("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testCompile "org.mockito:mockito-core:2.+"
     testCompile("org.mockito:mockito-junit-jupiter:$mockitJunitJupiterVersion")
     testCompile("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'junit.junit'
     }
-    
+}
+
+test {
+    useJUnitPlatform()
+    failFast = true
+    testLogging {
+        events 'PASSED', 'FAILED', 'SKIPPED'
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nTest result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
 }
