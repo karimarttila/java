@@ -14,6 +14,7 @@
 
 I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous Clojure and Javascript implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
 
+
 ## Tools and Versions
 
 I have used the following tools and versions:
@@ -22,9 +23,11 @@ I have used the following tools and versions:
 - [Gradle](https://gradle.org/) 4.10.2.
 - [Spring Boot](http://spring.io/projects/spring-boot) 2.0.5.RELEASE.
 
+
 ## Music
 
 A lot of Blues was consumed during the programming sessions. Blues was provided by various online radio stations, but [Blues Radio](https://www.internet-radio.com/station/bluesradio/) deserves a special mentioning. If I could play blues guitar like those guys I wouldn't hack a day in my life but play blues all day long.
+
 
 ## Gradle
 
@@ -35,6 +38,15 @@ gradle wrapper
 ```
 
 Gradle wrapper is also provided in this Git repo in [gradle](gradle) directory.
+
+
+
+## Spring Boot 2.0 and Spring 5.0
+
+I remember back in mid 2000 when [Java EE](https://en.wikipedia.org/wiki/Java_Platform,_Enterprise_Edition) was really bloated and [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) came with its dependency injection and autowiring and made things easier. Well, Spring itself seems to be rather bloated nowadays and therefore we have [Spring Boot](http://spring.io/projects/spring-boot) which considerably makes building Spring applications easier.
+
+Simple Server is implemented using [Spring Boot](http://spring.io/projects/spring-boot) v. 2.0.5 which uses [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) v. 5.0.9 (see [Spring Boot Documentation - Appendix F. Dependency versions](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html). If you are familiar with Spring application Simple Server also uses autowiring extensively.
+
 
 ## SonarQube
 
@@ -127,3 +139,12 @@ If there are no changes in the files, the tests are not run again (unless you gi
 ```bash
 ./gradlew --rerun-tasks test
 ```
+
+
+# Conclusions
+
+## Java as a Language
+
+**Verbosity.** Java is really, really verbose if you compare it to dynamic languages like Python, Javascript or Clojure.
+
+**Object oriented paradigm.** Object oriented paradigm was something cool in mid 1990's but nowadays seems more or less an unholy mess of classes having data, method and other classes having other data, methods and other classes... For data oriented applications I would rather use functional paradigm which makes a better separation between data and functions that operate on data. 
