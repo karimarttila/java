@@ -1,7 +1,5 @@
 package simpleserver.domaindb.dto;
 
-import org.json.JSONObject;
-
 /**
  * The Info.
  * Provides information to view index.html page.
