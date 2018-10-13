@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.Consts;
 
@@ -24,6 +25,18 @@ public class DomainTest {
     @Autowired
     Domain domain;
 
+
+    @DisplayName("Tests getting the info")
+    @Test
+    public void getInfoTest() {
+        logger.debug(Consts.LOG_ENTER);
+        Info info = domain.getInfo();
+        String infoStr = info.getInfoAsString();
+        assertEquals(infoStr, "index.html => Info in HTML format");
+        logger.debug(Consts.LOG_EXIT);
+    }
+
+
     @DisplayName("Tests getting the product groups")
     @Test
     public void getProductGroupsTest() {
@@ -32,8 +45,6 @@ public class DomainTest {
         String json = productGroups.getProductGroupsAsJson();
         assertEquals(json, "{\"1\":\"Books\",\"2\":\"Movies\"}");
         logger.debug(Consts.LOG_EXIT);
-
-
     }
 }
 

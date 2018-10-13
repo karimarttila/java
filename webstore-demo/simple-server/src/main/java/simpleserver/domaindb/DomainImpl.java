@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.Consts;
 
@@ -36,6 +37,7 @@ public class DomainImpl implements Domain {
         this.resourceLoader = resourceLoader;
     }
 
+
     /**
      * A private helper to read CSV files to a list of String arrays.
      *
@@ -61,6 +63,15 @@ public class DomainImpl implements Domain {
 
 
     @Override
+    public Info getInfo() {
+        var info = new Info();
+        logger.debug(Consts.LOG_ENTER);
+        logger.debug(Consts.LOG_EXIT);
+        return info;
+    }
+
+
+    @Override
     public ProductGroups getProductGroups() {
         var productGroups = new ProductGroups();
         logger.debug(Consts.LOG_ENTER);
@@ -75,5 +86,6 @@ public class DomainImpl implements Domain {
         logger.debug(Consts.LOG_EXIT);
         return productGroups;
     }
+
 
 }

@@ -1,5 +1,6 @@
 package simpleserver.domaindb;
 
+import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 
 /**
@@ -13,5 +14,12 @@ public interface Domain {
      * @return the product groups
      */
     ProductGroups getProductGroups();
+
+    /**
+     * Gets info.
+     *
+     * @return the info
+     */
+    Info getInfo();
 
 }

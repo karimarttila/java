@@ -13,7 +13,9 @@ public class ProductGroups {
     private Map<String, String> items = new HashMap<>();
 
     /**
-     * Gets product groups as json.
+     * Gets product groups as json. Used in testing.
+     * Not needed in production since Spring controller creates the mapping
+     * from the Java data structure (items) to the JSON automatically.
      *
      * @return the product groups as json
      */

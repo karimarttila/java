@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import simpleserver.domaindb.Domain;
+import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.Consts;
 
@@ -31,6 +32,20 @@ public class Server {
     @Autowired
     public Server(Domain domain) {
         this.domain = domain;
+    }
+
+
+    /**
+     * Gets info.
+     *
+     * @return the info.
+     */
+    @RequestMapping("/info")
+    public Info getInfo() {
+        logger.debug(Consts.LOG_ENTER);
+        Info info = domain.getInfo();
+        logger.debug(Consts.LOG_EXIT);
+        return info;
     }
 
     /**
