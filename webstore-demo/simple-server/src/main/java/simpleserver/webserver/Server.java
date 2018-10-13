@@ -9,7 +9,10 @@ import simpleserver.domaindb.Domain;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.Consts;
+import simpleserver.webserver.response.ProductGroupsOkResponseImpl;
+import simpleserver.webserver.response.ProductGroupsResponse;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -53,11 +56,13 @@ public class Server {
      * @return the product groups
      */
     @RequestMapping("/product-groups")
-    public ProductGroups getProductGroups() {
+    public Map<String, Object> getProductGroups() {
         logger.debug(Consts.LOG_ENTER);
         ProductGroups productGroups = domain.getProductGroups();
+        ProductGroupsResponse productGroupsOkResponse = ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
         logger.debug(Consts.LOG_EXIT);
-        return productGroups;
+        Map<String, Object> ret = productGroupsOkResponse.getResponse();
+        return ret;
     }
 
 

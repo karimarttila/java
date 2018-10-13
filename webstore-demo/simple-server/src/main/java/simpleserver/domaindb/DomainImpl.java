@@ -24,8 +24,7 @@ import java.util.List;
 @Service
 public class DomainImpl implements Domain {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final String productGroupFile = "product-groups.csv";
-    ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
 
     @Autowired
     public DomainImpl(ResourceLoader resourceLoader) {
@@ -70,6 +69,7 @@ public class DomainImpl implements Domain {
     public ProductGroups getProductGroups() {
         var productGroups = new ProductGroups();
         logger.debug(Consts.LOG_ENTER);
+        String productGroupFile = "product-groups.csv";
         List<String[]> csvList = readCsv(productGroupFile);
         if (csvList != null) {
             csvList.forEach((item) -> {

@@ -5,7 +5,7 @@ package simpleserver.domaindb.dto;
  * Provides information to view index.html page.
  */
 public class Info {
-    private String info = "index.html => Info in HTML format";
+    private final String info = "index.html => Info in HTML format";
 
     /**
      * Gets info as json. Used in testing.
@@ -14,18 +14,9 @@ public class Info {
      *
      * @return the info
      */
-    public String getInfoAsString() {
-        return info;
-    }
-
-
-    /**
-     * Gets info.
-     *
-     * @return the info
-     */
     public String getInfo() {
         return info;
     }
+
 }
 

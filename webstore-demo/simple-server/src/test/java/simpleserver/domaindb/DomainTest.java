@@ -13,6 +13,8 @@ import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.Consts;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Domain test")
@@ -30,7 +32,7 @@ public class DomainTest {
     public void getInfoTest() {
         logger.debug(Consts.LOG_ENTER);
         Info info = domain.getInfo();
-        String infoStr = info.getInfoAsString();
+        String infoStr = info.getInfo();
         assertEquals(infoStr, "index.html => Info in HTML format");
         logger.debug(Consts.LOG_EXIT);
     }
@@ -41,8 +43,10 @@ public class DomainTest {
     public void getProductGroupsTest() {
         logger.debug(Consts.LOG_ENTER);
         ProductGroups productGroups = domain.getProductGroups();
-        String json = productGroups.getProductGroupsAsJson();
-        assertEquals(json, "{\"1\":\"Books\",\"2\":\"Movies\"}");
+        Map<String, String> pg = productGroups.getProductGroups();
+        assertEquals(2, pg.size());
+        assertEquals("Books", pg.get("1"));
+        assertEquals("Movies", pg.get("2"));
         logger.debug(Consts.LOG_EXIT);
     }
 }
