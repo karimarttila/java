@@ -68,9 +68,9 @@ public class Server {
 
 
     /**
-     * Gets product groups.
+     * Gets products.
      *
-     * @return the product groups
+     * @return the products
      */
     @RequestMapping(value = "/products/{pgId}", method = RequestMethod.GET)
     public Map<String, Object>  getProducts(
