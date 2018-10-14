@@ -8,11 +8,12 @@ import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
 
 import static ch.qos.logback.classic.Level.DEBUG
+import static ch.qos.logback.classic.Level.TRACE
 import static ch.qos.logback.classic.Level.WARN
 
 appender("STDOUT", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
-        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] TEST %-5level %logger{35} - %msg %n"
+        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] GROOVYTEST %-5level %logger{35}.%M - %msg %n"
     }
 }
 
@@ -27,10 +28,10 @@ appender("FILE", RollingFileAppender) {
         totalSizeCap = "1KB"
     }
     encoder(PatternLayoutEncoder) {
-        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] TEST %-5level %logger{35} - %msg %n"
+        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] GROOVYTEST %-5level %logger{35}.%M - %msg %n"
     }
 }
 
 root(WARN, ["STDOUT"])
 root(WARN, ["FILE"])
-logger("simpleserver", DEBUG, ["STDOUT", "FILE"], false)
+logger("simpleserver", TRACE, ["STDOUT", "FILE"], false)

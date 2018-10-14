@@ -10,7 +10,7 @@ import static ch.qos.logback.classic.Level.WARN
 
 appender("STDOUT", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
-        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] PROD %-5level %logger{35} - %msg %n"
+        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] PROD %-5level %logger{35}.%M - %msg %n"
     }
 }
 
@@ -25,7 +25,7 @@ appender("FILE", RollingFileAppender) {
         totalSizeCap = "1KB"
     }
     encoder(PatternLayoutEncoder) {
-        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] PROD %-5level %logger{35} - %msg %n"
+        pattern = "%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] PROD %-5level %logger{35}.%M - %msg %n"
     }
 }
 

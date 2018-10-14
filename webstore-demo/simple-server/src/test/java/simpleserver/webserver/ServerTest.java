@@ -1,0 +1,54 @@
+package simpleserver.webserver;
+
+import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import java.util.HashMap;
+import simpleserver.util.Consts;
+
+
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(Server.class)
+public class ServerTest {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setup() {
+        logger.debug(Consts.LOG_ENTER);
+        logger.debug(Consts.LOG_EXIT);
+    }
+
+    @Test
+    void getInfo() throws Exception {
+        logger.debug(Consts.LOG_ENTER);
+        HashMap<String, String> expectedResult = new HashMap<>();
+        expectedResult.put("info", "index.html => Info in HTML format");
+        String expectedResultJson = new JSONObject(expectedResult).toString();
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/info").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
+                .andReturn();
+
+        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+
+    }
+
+}

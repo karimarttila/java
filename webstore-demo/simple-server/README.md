@@ -107,7 +107,7 @@ This is actually pretty nice and a wellcome addition to Java 9 - now we can test
 
 ## Logging
 
-Spring Boot comes with Logback out of the box. Spring Boot should support groovy configuration, and in main side it worked. For some reason in the test side Spring Boot does not recognize logback-test.groovy file and I had to create equivalent logback-test.xml file which was recognized - real weird. If someone figures out the reason for this please tell me. This is a bit of a nuisance since groovy configuration is so much more concise than xml configuration.
+Spring Boot comes with Logback out of the box. Spring Boot should support groovy configuration, and in main side it worked. For some reason in the test side when testing the domain layer [DomainTest.java](src/test/java/simpleserver/domaindb/DomainTest.java) Spring Boot does not recognize logback-test.groovy file and I had to create equivalent logback-test.xml file which was recognized - real weird. Especially really weird when the groovy configuration gets recognized in the [ServerTest.java](src/test/java/simpleserver/webserver/ServerTest.java). Probably I miss to pass some Spring context to the DomainTest class. If someone figures out the reason for this please tell me. This is a bit of a nuisance since groovy configuration is so much more concise than xml configuration.
 
 ## Spring Profiles
 

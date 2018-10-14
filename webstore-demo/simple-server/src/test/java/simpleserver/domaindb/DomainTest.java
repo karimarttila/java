@@ -1,6 +1,5 @@
 package simpleserver.domaindb;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Map;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.Consts;
 
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Domain test")
 @ExtendWith(SpringExtension.class)
@@ -50,4 +49,3 @@ public class DomainTest {
         logger.debug(Consts.LOG_EXIT);
     }
 }
-
