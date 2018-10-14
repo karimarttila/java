@@ -1,7 +1,7 @@
 # Java Simple Server  <!-- omit in toc -->
 
 
-## Table of Contents  <!-- omit in toc -->
+# Table of Contents  <!-- omit in toc -->
 - [Introduction](#introduction)
 - [Tools and Versions](#tools-and-versions)
 - [Music](#music)
@@ -10,12 +10,12 @@
 - [Java REPL](#java-repl)
 
 
-## Introduction
+# Introduction
 
 I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous Clojure and Javascript implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
 
 
-## Tools and Versions
+# Tools and Versions
 
 I have used the following tools and versions:
 
@@ -24,12 +24,12 @@ I have used the following tools and versions:
 - [Spring Boot](http://spring.io/projects/spring-boot) 2.0.5.RELEASE.
 
 
-## Music
+# Music
 
 A lot of Blues was consumed during the programming sessions. Blues was provided by various online radio stations, but [Blues Radio](https://www.internet-radio.com/station/bluesradio/) deserves a special mentioning. If I could play blues guitar like those guys I wouldn't hack a day in my life but play blues all day long.
 
 
-## Gradle
+# Gradle
 
 You can create the gradle wrapper using command:
 
@@ -41,14 +41,14 @@ Gradle wrapper is also provided in this Git repo in [gradle](gradle) directory.
 
 
 
-## Spring Boot 2.0 and Spring 5.0
+# Spring Boot 2.0 and Spring 5.0
 
 I remember back in mid 2000 when [Java EE](https://en.wikipedia.org/wiki/Java_Platform,_Enterprise_Edition) was really bloated and [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) came with its dependency injection and autowiring and made things easier. Well, Spring itself seems to be rather bloated nowadays and therefore we have [Spring Boot](http://spring.io/projects/spring-boot) which considerably makes building Spring applications easier.
 
 Simple Server is implemented using [Spring Boot](http://spring.io/projects/spring-boot) v. 2.0.5 which uses [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) v. 5.0.9 (see [Spring Boot Documentation - Appendix F. Dependency versions](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html). If you are familiar with Spring application Simple Server also uses autowiring extensively.
 
 
-## SonarQube
+# SonarQube
 
 I created a [Simple SonarQube](https://github.com/karimarttila/docker/tree/master/simple-sonarqube) container for Java 10 projects. I have usually configured [Jenkins](https://jenkins.io/) (see my blog article [Jenkins on AWS](https://medium.com/tieto-developers/jenkins-on-aws-49133e011ac5) if you are interested) and SonarQube servers for my Java projects in which I have been working as a Software Architect - now I wanted to see how easy [SonarQube](https://www.sonarqube.org/) was to used in my local Ubuntu 18 workstation using as a [Docker](https://www.docker.com/) container.
 
@@ -81,7 +81,7 @@ Example script [run-ss-container-sonarqube-analysis.sh](run-ss-container-sonarqu
 ./run-ss-container-sonarqube-analysis.sh
 ```
 
-## Java REPL
+# Java REPL
 
 Java 9 introduced a shiny Java REPL for the Java developers)! This is nothing compared to Lisp REPLs but anyway it's nice to have a Java REPL at last. You can start a Java REPL session with command "jshell". 
 
@@ -105,11 +105,11 @@ jPg ==> {"1":"Movies","2":"Books"}
 
 This is actually pretty nice and a wellcome addition to Java 9 - now we can test small code snippets like that without creating a bigger testing context.
 
-## Logging
+# Logging
 
 Spring Boot comes with Logback out of the box. Spring Boot should support groovy configuration, and in main side it worked. For some reason in the test side when testing the domain layer [DomainTest.java](src/test/java/simpleserver/domaindb/DomainTest.java) Spring Boot does not recognize logback-test.groovy file and I had to create equivalent logback-test.xml file which was recognized - real weird. Especially really weird when the groovy configuration gets recognized in the [ServerTest.java](src/test/java/simpleserver/webserver/ServerTest.java). Probably I miss to pass some Spring context to the DomainTest class. If someone figures out the reason for this please tell me. This is a bit of a nuisance since groovy configuration is so much more concise than xml configuration.
 
-## Spring Profiles
+# Spring Profiles
 
 Just for demonstration purposes I created two Spring profiles: dev and prod. You can start the script e.g. with dev profile like:
 
@@ -124,7 +124,7 @@ Dev profile uses file [application-dev.properties](src/main/resources/applicatio
 20
 ```
 
-## JUnit5
+# JUnit5
 
 Latest Spring Boot that I used writing this was version 2.0.5 which comes with JUnit 4.12. There were major changes in new JUnit5 and I wanted to try those, so I configured [build.gradle](build.gradle) to use JUnit5.
 
@@ -140,6 +140,91 @@ If there are no changes in the files, the tests are not run again (unless you gi
 ./gradlew --rerun-tasks test
 ```
 
+
+# Java Verbosity
+
+Let's have a couple of examples of Java verbosity and complexity related to other languages I used to implement Simple Server.
+
+Here we test API /product-groups which returns a simple JSON map. See how complex the testing is to implement in Java:
+
+TODO-KARI: Copy-paste again when JSON Web Token is implemented.
+
+```java
+    @Test
+    void getProductGroupsTest() throws Exception {
+        logger.debug(Consts.LOG_ENTER);
+        HashMap<String, String> productGroups = new HashMap<>();
+        productGroups.put("1", "Books");
+        productGroups.put("2", "Movies");
+        HashMap<String, Object> expectedResult = new HashMap<>();
+        expectedResult.put("ret", "ok");
+        expectedResult.put("product-groups", productGroups);
+        String expectedResultJson = new JSONObject(expectedResult).toString();
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/product-groups").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
+                .andReturn();
+
+        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+    }
+```
+
+The same in Clojure:
+
+```clojure
+(deftest get-product-groups-test
+  (log/trace "ENTER get-product-groups-test")
+  (testing "GET: /product-groups"
+    (let [req-body {:email "kari.karttinen@foo.com", :password "Kari"}
+          login-ret (-call-request ws/app-routes "/login" :post nil req-body)
+          dummy (log/trace (str "Got login-ret: " login-ret))
+          login-body (:body login-ret)
+          json-web-token (:json-web-token login-body)
+          params (-create-basic-authentication json-web-token)
+          get-ret (-call-request ws/app-routes "/product-groups" :get params nil)
+          dummy (log/trace (str "Got body: " get-ret))
+          status (:status get-ret)
+          body (:body get-ret)
+          right-body {:ret :ok, :product-groups {"1" "Books", "2" "Movies"}}
+          ]
+      (is (not (nil? json-web-token)))
+      (is (= status 200))
+      (is (= body right-body)))))
+```
+
+... and Javascript:
+
+```javascript
+  describe('GET /product-groups', function () {
+    let jwt;
+    it('Get Json web token', async () => {
+      // Async example in which we wait for the Promise to be
+      // ready (that i.e. the post to get jwt has been processed).
+      const jsonWebToken = await getJsonWebToken();
+      logger.trace('Got jsonWebToken: ', jsonWebToken);
+      assert.equal(jsonWebToken.length > 20, true);
+      jwt = jsonWebToken;
+    });
+    it('Successful GET: /product-groups', function (done) {
+      logger.trace('Using jwt: ', jwt);
+      const authStr = createAuthStr(jwt);
+      supertest(webServer)
+        .get('/product-groups')
+        .set('Accept', 'application/json')
+        .set('Authorization', authStr)
+        .expect('Content-Type', /json/)
+        .expect(200, {
+          ret: 'ok',
+          'product-groups': { 1: 'Books', 2: 'Movies' }
+        }, done);
+    });
+  });
+```
+
+As you can see from the example in Clojure and Javascript we can treat data as data, in Java not so much.
 
 # Conclusions
 
