@@ -1,14 +1,12 @@
 package simpleserver.webserver.response;
 
-import org.json.JSONPropertyName;
-import org.springframework.beans.factory.annotation.Autowired;
 import simpleserver.domaindb.dto.ProductGroups;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ProductGroupsOkResponseImpl implements ProductGroupsResponse {
-    private Map<String, Object> response = new HashMap<>();
+    private final Map<String, Object> response = new HashMap<>();
 
     private ProductGroupsOkResponseImpl(ProductGroups productGroups) {
         response.put("ret", "ok");
@@ -17,8 +15,7 @@ public class ProductGroupsOkResponseImpl implements ProductGroupsResponse {
     }
 
     public static ProductGroupsResponse createProductGroupsOkResponse(ProductGroups productGroups) {
-        var ret = new ProductGroupsOkResponseImpl(productGroups);
-        return ret;
+        return new ProductGroupsOkResponseImpl(productGroups);
     }
 
     @Override

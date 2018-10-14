@@ -13,7 +13,7 @@ import simpleserver.webserver.response.ProductGroupsOkResponseImpl;
 import simpleserver.webserver.response.ProductGroupsResponse;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+
 
 /**
  * The Server (Spring controller).
@@ -22,8 +22,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Server {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
     private final Domain domain;
 
     /**
@@ -59,10 +57,10 @@ public class Server {
     public Map<String, Object> getProductGroups() {
         logger.debug(Consts.LOG_ENTER);
         ProductGroups productGroups = domain.getProductGroups();
-        ProductGroupsResponse productGroupsOkResponse = ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
+        ProductGroupsResponse productGroupsOkResponse =
+                ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
         logger.debug(Consts.LOG_EXIT);
-        Map<String, Object> ret = productGroupsOkResponse.getResponse();
-        return ret;
+        return productGroupsOkResponse.getResponse();
     }
 
 

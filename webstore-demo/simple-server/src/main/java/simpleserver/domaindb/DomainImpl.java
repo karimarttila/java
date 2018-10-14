@@ -1,6 +1,9 @@
 package simpleserver.domaindb;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +45,10 @@ public class DomainImpl implements Domain {
         logger.debug(Consts.LOG_ENTER + ", fileName: " + fileName);
         List<String[]> ret = null;
         Resource res = resourceLoader.getResource("classpath:" + fileName);
+        CSVParser parser = new CSVParserBuilder().withSeparator('\t').build();
         try (InputStream is = res.getInputStream();
              Reader reader = new InputStreamReader(is);
-             CSVReader csvReader = new CSVReader(reader, '\t');
+             CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(parser).build()
         ) {
             ret = csvReader.readAll();
         } catch (IOException e) {

@@ -5,8 +5,8 @@ package simpleserver.domaindb.dto;
  * Provides information to view index.html page.
  */
 public class Info {
-    private final String info = "index.html => Info in HTML format";
 
+    private static final String info = "index.html => Info in HTML format";
     /**
      * Gets info as json. Used in testing.
      * Not needed in production since Spring controller creates the mapping

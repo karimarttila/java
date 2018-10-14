@@ -1,10 +1,5 @@
 package simpleserver.domaindb.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import org.json.JSONObject;
-import org.json.JSONPropertyIgnore;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +8,7 @@ import java.util.Map;
  */
 public class ProductGroups {
 
-    private Map<String, String> items = new HashMap<>();
+    private final Map<String, String> items = new HashMap<>();
 
     /**
      * Gets product groups for the Spring Controller (Server.java).
