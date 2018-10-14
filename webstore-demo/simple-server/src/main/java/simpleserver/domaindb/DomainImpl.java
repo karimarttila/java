@@ -12,12 +12,14 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
+import simpleserver.domaindb.dto.Products;
 import simpleserver.util.Consts;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -84,6 +86,31 @@ public class DomainImpl implements Domain {
         }
         logger.debug(Consts.LOG_EXIT);
         return productGroups;
+    }
+
+
+    @Override
+    public Products getProducts(int pgId) {
+        var products = new Products(pgId);
+        logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId);
+        String productsFile = "pg-" + pgId + "-products.csv";
+        List<String[]> csvList = readCsv(productsFile);
+        if (csvList != null) {
+            csvList.forEach((item) -> {
+                String item_pId = item[0];
+                String item_pgId = item[1];
+                String item_title = item[2];
+                String item_price = item[3];
+                List<String> product = new ArrayList<String>();
+                product.add(item_pId);
+                product.add(item_pgId);
+                product.add(item_title);
+                product.add(item_price);
+                products.addProduct(product);
+            });
+        }
+        logger.debug(Consts.LOG_EXIT);
+        return products;
     }
 
 

@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 import java.util.Map;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
+import simpleserver.domaindb.dto.Products;
 import simpleserver.util.Consts;
 
 
@@ -46,6 +49,22 @@ public class DomainTest {
         assertEquals(2, pg.size());
         assertEquals("Books", pg.get("1"));
         assertEquals("Movies", pg.get("2"));
+        logger.debug(Consts.LOG_EXIT);
+    }
+
+
+    @DisplayName("Tests getting the products")
+    @Test
+    public void getProductsTest() {
+        logger.debug(Consts.LOG_ENTER);
+        Products bookProducts = domain.getProducts(1);
+        List<List> books = bookProducts.getProducts();
+        Products movieProducts = domain.getProducts(2);
+        List<List> movies = movieProducts.getProducts();
+        assertEquals(35, books.size());
+        assertEquals(169, movies.size());
+        List movie = movies.get(48);
+        assertEquals("Once Upon a Time in the West", movie.get(2));
         logger.debug(Consts.LOG_EXIT);
     }
 }

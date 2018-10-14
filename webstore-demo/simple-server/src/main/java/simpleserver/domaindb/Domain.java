@@ -2,11 +2,19 @@ package simpleserver.domaindb;
 
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
+import simpleserver.domaindb.dto.Products;
 
 /**
  * The interface Domain.
  */
 public interface Domain {
+
+    /**
+     * Gets info.
+     *
+     * @return the info
+     */
+    Info getInfo();
 
     /**
      * Gets product groups.
@@ -16,10 +24,10 @@ public interface Domain {
     ProductGroups getProductGroups();
 
     /**
-     * Gets info.
+     * Gets the products.
      *
-     * @return the info
+     * @param pgId product group id
+     * @return the products
      */
-    Info getInfo();
-
+    Products getProducts(int pgId);
 }
