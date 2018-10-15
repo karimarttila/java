@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.Map;
 import simpleserver.domaindb.dto.Info;
+import simpleserver.domaindb.dto.Product;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.domaindb.dto.Products;
 import simpleserver.util.Consts;
@@ -67,4 +69,21 @@ public class DomainTest {
         assertEquals("Once Upon a Time in the West", movie.get(2));
         logger.debug(Consts.LOG_EXIT);
     }
+
+
+    @DisplayName("Tests getting the product")
+    @Test
+    public void getProductTest() {
+        logger.debug(Consts.LOG_ENTER);
+        Product product = domain.getProduct(2, 49);
+        List<String> list = product.getProduct();
+        assertNotNull(list);
+        assertEquals(true, list.size() > 0);
+        assertEquals("49", list.get(0));
+        assertEquals("2", list.get(1));
+        // What a coincidence! The chosen movie is the best western of all times!
+        assertEquals("Once Upon a Time in the West", list.get(2));
+        logger.debug(Consts.LOG_EXIT);
+    }
+
 }

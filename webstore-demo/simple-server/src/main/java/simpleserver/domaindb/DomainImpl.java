@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.domaindb.dto.Products;
+import simpleserver.domaindb.dto.Product;
 import simpleserver.util.Consts;
 
 import java.io.IOException;
@@ -20,7 +21,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -114,4 +118,25 @@ public class DomainImpl implements Domain {
     }
 
 
+    // I get a bit bored here, so let's just read the products again,
+    // and implement the caching later if we have time.
+    @Override
+    public Product getProduct(int pgId, int pId) {
+        var product = new Product(pgId, pId);
+        logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId + ", pId: " + pId);
+        String productsFile = "pg-" + pgId + "-products.csv";
+        List<String[]> csvList = readCsv(productsFile);
+        if (csvList != null) {
+            List<String[]> result = csvList.stream().filter(item ->
+                    (item[0].equals(Integer.toString(pId))
+                            && (item[1].equals(Integer.toString(pgId))))).
+                    collect(Collectors.toList());
+            // There should be 0 or 1.
+            if (result.size() == 1) {
+                product.setProduct(result.get(0));
+            }
+        }
+        logger.debug(Consts.LOG_EXIT);
+        return product;
+    }
 }

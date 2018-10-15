@@ -3,6 +3,7 @@ package simpleserver.domaindb;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.domaindb.dto.Products;
+import simpleserver.domaindb.dto.Product;
 
 /**
  * The interface Domain.
@@ -30,4 +31,13 @@ public interface Domain {
      * @return the products
      */
     Products getProducts(int pgId);
+
+
+    /**
+     * Gets the product.
+     * @param pgId product group id
+     * @param pId product id
+     * @return the product
+     */
+    Product getProduct(int pgId, int pId);
 }
