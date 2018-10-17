@@ -11,5 +11,5 @@ public interface Response {
      * Gets the responce map that Spring converts to JSON.
      * @return the response
      */
-    Map<String, Object> getResponse();
+    Map<String, Object> getRestView();
 }

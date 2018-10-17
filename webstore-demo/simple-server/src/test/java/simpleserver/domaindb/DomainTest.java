@@ -16,9 +16,7 @@ import java.util.Map;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.Product;
 import simpleserver.domaindb.dto.ProductGroups;
-import simpleserver.domaindb.dto.Products;
 import simpleserver.util.Consts;
-
 
 
 @DisplayName("Domain test")
@@ -59,14 +57,15 @@ public class DomainTest {
     @Test
     public void getProductsTest() {
         logger.debug(Consts.LOG_ENTER);
-        Products bookProducts = domain.getProducts(1);
-        List<List> books = bookProducts.getProducts();
-        Products movieProducts = domain.getProducts(2);
-        List<List> movies = movieProducts.getProducts();
+        List<Product> books = domain.getProducts(1);
+        assertNotNull(books);
+        List<Product> movies = domain.getProducts(2);
+        assertNotNull(movies);
         assertEquals(35, books.size());
         assertEquals(169, movies.size());
-        List movie = movies.get(48);
-        assertEquals("Once Upon a Time in the West", movie.get(2));
+        Product movie = movies.get(48);
+        assertNotNull(movie);
+        assertEquals("Once Upon a Time in the West", movie.getTitle());
         logger.debug(Consts.LOG_EXIT);
     }
 
@@ -76,13 +75,11 @@ public class DomainTest {
     public void getProductTest() {
         logger.debug(Consts.LOG_ENTER);
         Product product = domain.getProduct(2, 49);
-        List<String> list = product.getProduct();
-        assertNotNull(list);
-        assertEquals(true, list.size() > 0);
-        assertEquals("49", list.get(0));
-        assertEquals("2", list.get(1));
+        assertNotNull(product);
+        assertEquals(49, product.getpId());
+        assertEquals(2, product.getPgId());
         // What a coincidence! The chosen movie is the best western of all times!
-        assertEquals("Once Upon a Time in the West", list.get(2));
+        assertEquals("Once Upon a Time in the West", product.getTitle());
         logger.debug(Consts.LOG_EXIT);
     }
 

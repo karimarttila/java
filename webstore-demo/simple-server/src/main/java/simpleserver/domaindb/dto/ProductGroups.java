@@ -8,26 +8,27 @@ import java.util.Map;
  */
 public class ProductGroups {
 
-    private final Map<String, String> items = new HashMap<>();
+    private final Map<String, String> groups = new HashMap<>();
 
     /**
-     * Gets product groups for the Spring Controller (Server.java).
+     * Gets product groups for the Spring controller (Server.java).
+     * Good as it is (map) which Spring controller converts to json object.
      *
      * @return product groups
      */
 
     public Map<String, String> getProductGroups() {
-        return items;
+        return groups;
     }
 
     /**
      * Adds a new product group.
      *
-     * @param id   the id
-     * @param name the name
+     * @param id   the id of the group
+     * @param name the name of the group
      */
     public void addProductGroup(String id, String name) {
-        items.put(id, name);
+        groups.put(id, name);
     }
 
 }

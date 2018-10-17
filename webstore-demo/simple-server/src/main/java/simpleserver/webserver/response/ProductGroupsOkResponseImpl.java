@@ -19,7 +19,7 @@ public class ProductGroupsOkResponseImpl implements Response {
     }
 
     @Override
-    public Map<String, Object> getResponse() {
+    public Map<String, Object> getRestView() {
         return response;
     }
 

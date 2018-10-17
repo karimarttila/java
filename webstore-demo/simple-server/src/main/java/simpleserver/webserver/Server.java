@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import simpleserver.domaindb.Domain;
 import simpleserver.domaindb.dto.Info;
+import simpleserver.domaindb.dto.Product;
 import simpleserver.domaindb.dto.ProductGroups;
-import simpleserver.domaindb.dto.Products;
 import simpleserver.util.Consts;
 import simpleserver.webserver.response.ProductGroupsOkResponseImpl;
+import simpleserver.webserver.response.ProductOkResponseImpl;
 import simpleserver.webserver.response.Response;
 import simpleserver.webserver.response.ProductsOkResponseImpl;
+
+import java.util.List;
 import java.util.Map;
 
 
@@ -63,7 +66,7 @@ public class Server {
         Response productGroupsOkResponse =
                 ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
         logger.debug(Consts.LOG_EXIT);
-        return productGroupsOkResponse.getResponse();
+        return productGroupsOkResponse.getRestView();
     }
 
 
@@ -76,11 +79,28 @@ public class Server {
     public Map<String, Object>  getProducts(
             @PathVariable("pgId") int pgId) {
         logger.debug(Consts.LOG_ENTER);
-        Products products = domain.getProducts(pgId);
+        List<Product> products = domain.getProducts(pgId);
         Response productsOkResponse =
-                ProductsOkResponseImpl.createProductsOkResponse(products);
+                ProductsOkResponseImpl.createProductsOkResponse(pgId, products);
         logger.debug(Consts.LOG_EXIT);
-        return productsOkResponse.getResponse();
+        return productsOkResponse.getRestView();
+    }
+
+
+    /**
+     * Gets one product.
+     *
+     * @return the product
+     */
+    @RequestMapping(value = "/product/{pgId}/{pId}", method = RequestMethod.GET)
+    public Map<String, Object>  getProducts(
+            @PathVariable("pgId") int pgId, @PathVariable("pId") int pId) {
+        logger.debug(Consts.LOG_ENTER);
+        Product product = domain.getProduct(pgId, pId);
+        Response productOkResponse =
+                ProductOkResponseImpl.createProductOkResponse(product);
+        logger.debug(Consts.LOG_EXIT);
+        return productOkResponse.getRestView();
     }
 
 

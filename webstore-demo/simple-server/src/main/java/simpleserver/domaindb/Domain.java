@@ -2,8 +2,9 @@ package simpleserver.domaindb;
 
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
-import simpleserver.domaindb.dto.Products;
 import simpleserver.domaindb.dto.Product;
+
+import java.util.List;
 
 /**
  * The interface Domain.
@@ -30,7 +31,7 @@ public interface Domain {
      * @param pgId product group id
      * @return the products
      */
-    Products getProducts(int pgId);
+    List<Product> getProducts(int pgId);
 
 
     /**

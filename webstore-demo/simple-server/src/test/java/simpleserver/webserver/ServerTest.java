@@ -99,5 +99,23 @@ public class ServerTest {
         logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
     }
 
-}
 
+    @Test
+    void getProductTest() throws Exception {
+        logger.debug(Consts.LOG_ENTER);
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/product/2/49").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.ret").value("ok"))
+                .andExpect(jsonPath("$.pg-id").value("2"))
+                .andExpect(jsonPath("$.p-id").value("49"))
+                .andExpect(jsonPath("$.product", hasSize(8)))
+                // What a coincidence! The chosen movie is the best western of all times!
+                .andExpect(jsonPath("$.product[2]").value("Once Upon a Time in the West"))
+                .andReturn();
+        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+    }
+
+}

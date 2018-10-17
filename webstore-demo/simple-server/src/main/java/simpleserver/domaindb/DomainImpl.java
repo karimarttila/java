@@ -12,7 +12,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
-import simpleserver.domaindb.dto.Products;
 import simpleserver.domaindb.dto.Product;
 import simpleserver.util.Consts;
 
@@ -21,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +32,8 @@ import java.util.stream.Collectors;
 public class DomainImpl implements Domain {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ResourceLoader resourceLoader;
+    // Map for products in products group (key: product group id).
+    private final HashMap<String, List<Product>> productsCache = new HashMap<>();
 
     @Autowired
     public DomainImpl(ResourceLoader resourceLoader) {
@@ -94,47 +94,61 @@ public class DomainImpl implements Domain {
 
 
     @Override
-    public Products getProducts(int pgId) {
-        var products = new Products(pgId);
+    public List<Product> getProducts(int pgId) {
+        List<Product> products;
         logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId);
-        String productsFile = "pg-" + pgId + "-products.csv";
-        List<String[]> csvList = readCsv(productsFile);
-        if (csvList != null) {
-            csvList.forEach((item) -> {
-                String item_pId = item[0];
-                String item_pgId = item[1];
-                String item_title = item[2];
-                String item_price = item[3];
-                List<String> product = new ArrayList<String>();
-                product.add(item_pId);
-                product.add(item_pgId);
-                product.add(item_title);
-                product.add(item_price);
-                products.addProduct(product);
-            });
+        products = productsCache.get(Integer.toString(pgId));
+        if (products == null) {
+            logger.trace("Loading pgId "+ pgId + " to cache", pgId);
+            String productsFile = "pg-" + pgId + "-products.csv";
+            List<String[]> csvList = readCsv(productsFile);
+            List<Product> newProductsCache = new ArrayList<Product>();
+            if (csvList != null) {
+                csvList.forEach((item) -> {
+                    int pId = Integer.parseInt(item[0]);
+                    int myPgId = Integer.parseInt(item[1]);
+                    String title = item[2];
+                    double price = Double.parseDouble(item[3]);
+                    String author_or_director = item[4];
+                    int year = Integer.parseInt(item[5]);
+                    String country = item[6];
+                    String genre_or_language = item[7];
+                    Product product = new Product(myPgId, pId, title, price,
+                            author_or_director, year, country,
+                            genre_or_language);
+                    newProductsCache.add(product);
+                });
+            }
+            productsCache.put(Integer.toString(pgId), newProductsCache);
+            products = newProductsCache;
         }
         logger.debug(Consts.LOG_EXIT);
         return products;
     }
 
 
-    // I get a bit bored here, so let's just read the products again,
-    // and implement the caching later if we have time.
     @Override
     public Product getProduct(int pgId, int pId) {
-        var product = new Product(pgId, pId);
         logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId + ", pId: " + pId);
-        String productsFile = "pg-" + pgId + "-products.csv";
-        List<String[]> csvList = readCsv(productsFile);
-        if (csvList != null) {
-            List<String[]> result = csvList.stream().filter(item ->
-                    (item[0].equals(Integer.toString(pId))
-                            && (item[1].equals(Integer.toString(pgId))))).
-                    collect(Collectors.toList());
+        var products =  productsCache.get(Integer.toString(pgId));
+        if (products == null) {
+            products = getProducts(pgId);
+        }
+        Product product = null;
+        if (products != null) {
+            List<Product> result = products.stream().filter(thisProduct ->
+                    (thisProduct.getpId() == pId) && (thisProduct.getPgId() == pgId))
+                    .collect(Collectors.toList());
             // There should be 0 or 1.
             if (result.size() == 1) {
-                product.setProduct(result.get(0));
+                product = result.get(0);
             }
+            else {
+                logger.error("Didn't find exactly one product, count is: " + result.size());
+            }
+        }
+        else {
+            logger.error("Couldn't find products for pgId: " + pgId);
         }
         logger.debug(Consts.LOG_EXIT);
         return product;
