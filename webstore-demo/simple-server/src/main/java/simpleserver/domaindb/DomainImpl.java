@@ -99,7 +99,7 @@ public class DomainImpl implements Domain {
         logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId);
         products = productsCache.get(Integer.toString(pgId));
         if (products == null) {
-            logger.trace("Loading pgId "+ pgId + " to cache", pgId);
+            logger.debug(" Loading pgId "+ pgId + " to cache", pgId);
             String productsFile = "pg-" + pgId + "-products.csv";
             List<String[]> csvList = readCsv(productsFile);
             List<Product> newProductsCache = new ArrayList<Product>();

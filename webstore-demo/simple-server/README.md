@@ -12,7 +12,7 @@
 
 # Introduction
 
-I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous Clojure and Javascript implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
+I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous [Clojure](https://github.com/karimarttila/clojure/tree/master/clj-ring-cljs-reagent-demo/simple-server) and [Javascript](https://github.com/karimarttila/javascript/tree/master/webstore-demo/simple-server) implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
 
 
 # Tools and Versions
@@ -80,6 +80,15 @@ Example script [run-ss-container-sonarqube-analysis.sh](run-ss-container-sonarqu
 ```bash
 ./run-ss-container-sonarqube-analysis.sh
 ```
+
+# IDE
+
+[IntelliJ IDEA](https://www.jetbrains.com/idea/) is my favorite Java IDE. I used for years [Eclipse](http://www.eclipse.org/) since it is free and very widely used with our offshore developers (and I was working as an onsite architect at that time - clear benefits to use the same IDE and provide examples for developers using the common IDE - not so important any more). I switched a few years ago to IntelliJ IDEA and have never missed bloated Eclipse ever since. I  use [PyCharm](https://www.jetbrains.com/pycharm) for Python programming and since PyCharm and IDEA are provided by the same company (JetBrains) they provide very similar look-and-feel. I also use IntelliJ IDEA with [Cursive](https://cursive-ide.com/) plugin for Clojure programming and it also provides very similar look-and-feel. For my previous Javascript excercise I used [Visual Studio Code](https://code.visualstudio.com/) (and with my personal tweakings I managed to make it give pretty same feel, though the look is different, of course).
+
+# Java Static Code Analysis
+
+TODO: Analyze: tell something about IntelliJ IDEA...
+
 
 # Java REPL
 
@@ -239,6 +248,8 @@ Spring Boot makes creating server / microservice applications using Java much ea
 **Object oriented paradigm.** Object oriented paradigm was something cool in mid 1990's but nowadays seems more or less an unholy mess of classes having data, method and other classes having other data, methods and other classes... For data oriented applications I would rather use functional paradigm which makes a better separation between data and functions that operate on data. 
 
 **Safety.** If you need a staticly typed safe language and runtime environment (JVM - some 20 years of solid testing in enterprise world) with a great ecosystem for a big enterprise project with tens of developers - Java is the solution. 
+
+**IDE tooling.** IDE tooling is of course great since we are using statically typed language. [IntelliJ IDEA](https://www.jetbrains.com/idea/) (my favorite Java IDE) provides exact suggestions for methods when it recognizes which class we are dealing with.
 
 **Learning curve.** Difficult to say anything about this since I've been programming Java some 20 years now (first Java project was actually in year 1998). But after this exercise I have a feeling that for a newbie Java basic stuff cannot be learned in a couple of days and start being productive and learn the new stuff on the way as you can do e.g. with Python and Javascript. Also the frameworks take some time to learn (even a hard-core Java programmer like me forgot some peculiarities regarding Spring when I have not done serious Java/Spring programming about in 1,5 years).
 
