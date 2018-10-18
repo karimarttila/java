@@ -65,7 +65,7 @@ public class DomainTest {
         assertEquals(169, movies.size());
         Product movie = movies.get(48);
         assertNotNull(movie);
-        assertEquals("Once Upon a Time in the West", movie.getTitle());
+        assertEquals("Once Upon a Time in the West", movie.title);
         logger.debug(Consts.LOG_EXIT);
     }
 
@@ -76,10 +76,10 @@ public class DomainTest {
         logger.debug(Consts.LOG_ENTER);
         Product product = domain.getProduct(2, 49);
         assertNotNull(product);
-        assertEquals(49, product.getpId());
-        assertEquals(2, product.getPgId());
+        assertEquals(49, product.pId);
+        assertEquals(2, product.pgId);
         // What a coincidence! The chosen movie is the best western of all times!
-        assertEquals("Once Upon a Time in the West", product.getTitle());
+        assertEquals("Once Upon a Time in the West", product.title);
         logger.debug(Consts.LOG_EXIT);
     }
 

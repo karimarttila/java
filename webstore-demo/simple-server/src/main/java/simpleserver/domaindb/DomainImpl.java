@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,7 +31,7 @@ public class DomainImpl implements Domain {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ResourceLoader resourceLoader;
     // Map for products in products group (key: product group id).
-    private final HashMap<String, List<Product>> productsCache = new HashMap<>();
+    Map<String, List<Product>> syncProductsCache = Collections.synchronizedMap(new HashMap<String, List<Product>>());
 
     @Autowired
     public DomainImpl(ResourceLoader resourceLoader) {
@@ -97,7 +95,7 @@ public class DomainImpl implements Domain {
     public List<Product> getProducts(int pgId) {
         List<Product> products;
         logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId);
-        products = productsCache.get(Integer.toString(pgId));
+        products = syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             logger.debug(" Loading pgId "+ pgId + " to cache", pgId);
             String productsFile = "pg-" + pgId + "-products.csv";
@@ -119,7 +117,7 @@ public class DomainImpl implements Domain {
                     newProductsCache.add(product);
                 });
             }
-            productsCache.put(Integer.toString(pgId), newProductsCache);
+            syncProductsCache.put(Integer.toString(pgId), newProductsCache);
             products = newProductsCache;
         }
         logger.debug(Consts.LOG_EXIT);
@@ -130,14 +128,14 @@ public class DomainImpl implements Domain {
     @Override
     public Product getProduct(int pgId, int pId) {
         logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId + ", pId: " + pId);
-        var products =  productsCache.get(Integer.toString(pgId));
+        var products =  syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             products = getProducts(pgId);
         }
         Product product = null;
         if (products != null) {
             List<Product> result = products.stream().filter(thisProduct ->
-                    (thisProduct.getpId() == pId) && (thisProduct.getPgId() == pgId))
+                    (thisProduct.pId == pId) && (thisProduct.pgId == pgId))
                     .collect(Collectors.toList());
             // There should be 0 or 1.
             if (result.size() == 1) {

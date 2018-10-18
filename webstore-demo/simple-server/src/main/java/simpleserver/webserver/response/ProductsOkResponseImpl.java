@@ -19,10 +19,10 @@ public class ProductsOkResponseImpl implements Response {
         // Has to do like this or creates a Json conversion with extra layer.
         List<String[]> productsView = products.stream().map(product -> {
             String[] p = new String[4];
-            p[0] = Integer.toString(product.getpId());
-            p[1] = Integer.toString(product.getPgId());
-            p[2] = product.getTitle();
-            p[3] = Double.toString(product.getPrice());
+            p[0] = Integer.toString(product.pId);
+            p[1] = Integer.toString(product.pgId);
+            p[2] = product.title;
+            p[3] = Double.toString(product.price);
             return p;
         }).collect(Collectors.toList());
         response.put("products", productsView);
