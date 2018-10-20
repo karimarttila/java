@@ -61,6 +61,7 @@ ext{
     mockitJunitJupiterVersion = '2.18.3'
     opencsvVersion = '4.3.1'
     jsonPathVersion = '2.4.0'
+    commonsCodecVersion = '1.11'
 }
 
 
@@ -70,6 +71,8 @@ dependencies {
     compile("org.json:json:$jsonVersion")
     compile("com.opencsv:opencsv:$opencsvVersion")
     compile("org.codehaus.groovy:groovy-all:$rootProject.ext.groovyVersion")
+    compile("commons-codec:commons-codec:$rootProject.ext.commonsCodecVersion")
+    
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")       
     testCompile("org.junit.jupiter:junit-jupiter-params:$junitVersion")

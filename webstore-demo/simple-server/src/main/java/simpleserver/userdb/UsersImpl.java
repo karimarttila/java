@@ -5,8 +5,15 @@ import org.slf4j.LoggerFactory;
 import simpleserver.userdb.dto.User;
 import simpleserver.util.Consts;
 import org.springframework.stereotype.Service;
+import simpleserver.util.SSErrorCode;
+import simpleserver.util.SSException;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.commons.codec.digest.DigestUtils;
+
 
 /**
  * The type Users.
@@ -16,25 +23,29 @@ public class UsersImpl implements Users {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
-     * The Sync user db.
+     * The Synchronized user db. Synchronized since Spring Services
+     * are singletons by default (and hence not multi-thread safe)
+     * and class member variables need to be synchoronized
+     * to be thread safe.
      */
-    Map<String, User> syncUserDb =
+    private final Map<String, User> syncUserDb =
             Collections.synchronizedMap(new HashMap<String, User>());
     /**
-     * The Counter.
+     * The Counter. Access synchronized on method level.
      */
-    long counter = 3;
+    private long counter = 3;
+
 
     /**
      * Instantiates a new Users.
      */
     public UsersImpl() {
         User user1 = new User(1, "kari.karttinen@foo.com",
-                "Kari", "Karttinen", "2087856692");
+                "Kari", "Karttinen", "87EE0597C41D7AB8C074D7DC4794716D");
         User user2 = new User(2, "timo.tillinen@foo.com",
-                "Timo", "Tillinen", "2087903674");
+                "Timo", "Tillinen", "EE5F0C6F4D191B58497F7DB5C5C9CAF8");
         User user3 = new User(3, "erkka.erkkila@foo.com",
-                "Erkka", "Erkkila", "170251027");
+                "Erkka", "Erkkila", "8F0E3B40464DFF73C392DCE9F2DCE9DD");
         syncUserDb.put(Long.toString(user1.userId), user1);
         syncUserDb.put(Long.toString(user2.userId), user2);
         syncUserDb.put(Long.toString(user3.userId), user3);
@@ -45,21 +56,16 @@ public class UsersImpl implements Users {
      *
      * @return the long
      */
-    public synchronized long counter() {
+    private synchronized long counter() {
         counter++;
         return counter;
     }
 
-    /**
-     * Gets users.
-     *
-     * @return the users
-     */
+
+    @Override
     public Map getUsers() {
         return new HashMap<String, User>(syncUserDb);
-
     }
-
 
     @Override
     public boolean emailAlreadyExists(String givenEmail) {
@@ -70,5 +76,29 @@ public class UsersImpl implements Users {
         boolean ret = (filteredUsers.size() > 0);
         logger.debug(Consts.LOG_EXIT + ", ret: " + ret);
         return ret;
+    }
+
+    @Override
+    public User addUser(String newEmail, String firstName, String lastName, String password) {
+        logger.debug(Consts.LOG_ENTER);
+        User user = null;
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new SSException("Unknown hashing algorithm MD5", e, SSErrorCode.SERVER_ERROR);
+        }
+        if (!emailAlreadyExists(newEmail)) {
+            long id = counter();
+            String hashedPassword = DigestUtils.md5Hex(password).toUpperCase();
+            user = new User(id, newEmail, firstName, lastName, hashedPassword);
+            syncUserDb.put(Long.toString(id), user);
+        }
+        else {
+            throw new SSException("Email already exists: " + newEmail, SSErrorCode.EMAIL_ALREADY_EXISTS);
+        }
+        logger.debug(Consts.LOG_EXIT);
+        return user;
     }
 }

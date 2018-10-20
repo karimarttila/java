@@ -40,7 +40,6 @@ gradle wrapper
 Gradle wrapper is also provided in this Git repo in [gradle](gradle) directory.
 
 
-
 # Spring Boot 2.0 and Spring 5.0
 
 I remember back in mid 2000 when [Java EE](https://en.wikipedia.org/wiki/Java_Platform,_Enterprise_Edition) was really bloated and [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) came with its dependency injection and autowiring and made things easier. Well, Spring itself seems to be rather bloated nowadays and therefore we have [Spring Boot](http://spring.io/projects/spring-boot) which considerably makes building Spring applications easier.
@@ -81,9 +80,11 @@ Example script [run-ss-container-sonarqube-analysis.sh](run-ss-container-sonarqu
 ./run-ss-container-sonarqube-analysis.sh
 ```
 
+
 # IDE
 
 [IntelliJ IDEA](https://www.jetbrains.com/idea/) is my favorite Java IDE. I used for years [Eclipse](http://www.eclipse.org/) since it is free and very widely used with our offshore developers (and I was working as an onsite architect at that time - clear benefits to use the same IDE and provide examples for developers using the common IDE - not so important any more). I switched a few years ago to IntelliJ IDEA and have never missed bloated Eclipse ever since. I  use [PyCharm](https://www.jetbrains.com/pycharm) for Python programming and since PyCharm and IDEA are provided by the same company (JetBrains) they provide very similar look-and-feel. I also use IntelliJ IDEA with [Cursive](https://cursive-ide.com/) plugin for Clojure programming and it also provides very similar look-and-feel. For my previous Javascript excercise I used [Visual Studio Code](https://code.visualstudio.com/) (and with my personal tweakings I managed to make it give pretty same feel, though the look is different, of course).
+
 
 # Java Static Code Analysis
 
@@ -112,11 +113,22 @@ jshell> JSONObject jPg = new JSONObject(pg);
 jPg ==> {"1":"Movies","2":"Books"}
 ```
 
+Another example to generate the hash for example passwords:
+```bash
+jshell> /env -class-path /home/kari/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar
+|  Setting new options and restoring state.
+jshell> import org.apache.commons.codec.digest.DigestUtils;
+jshell> DigestUtils.md5Hex("Kari").toUpperCase();
+$2 ==> "87EE0597C41D7AB8C074D7DC4794716D"
+```
+
 This is actually pretty nice and a wellcome addition to Java 9 - now we can test small code snippets like that without creating a bigger testing context.
+
 
 # Logging
 
 Spring Boot comes with Logback out of the box. Spring Boot should support groovy configuration, and in main side it worked. For some reason in the test side when testing the domain layer [DomainTest.java](src/test/java/simpleserver/domaindb/DomainTest.java) Spring Boot does not recognize logback-test.groovy file and I had to create equivalent logback-test.xml file which was recognized - real weird. Especially really weird when the groovy configuration gets recognized in the [ServerTest.java](src/test/java/simpleserver/webserver/ServerTest.java). Probably I miss to pass some Spring context to the DomainTest class. If someone figures out the reason for this please tell me. This is a bit of a nuisance since groovy configuration is so much more concise than xml configuration.
+
 
 # Spring Profiles
 
@@ -133,6 +145,7 @@ Dev profile uses file [application-dev.properties](src/main/resources/applicatio
 20
 ```
 
+
 # JUnit5
 
 Latest Spring Boot that I used writing this was version 2.0.5 which comes with JUnit 4.12. There were major changes in new JUnit5 and I wanted to try those, so I configured [build.gradle](build.gradle) to use JUnit5.
@@ -147,6 +160,17 @@ If there are no changes in the files, the tests are not run again (unless you gi
 
 ```bash
 ./gradlew --rerun-tasks test
+```
+
+Using JUnit5 it is pretty nice to test e.g. exceptions:
+
+```java
+        // Trying to add the same email again.
+        Executable codeToTest = () -> {
+            User failedUser = users.addUser("jamppa.jamppanen@foo.com", "Jamppa", "Jamppanen", "JampanSalasana");
+        };
+        SSException ex = assertThrows(SSException.class, codeToTest);
+        assertEquals("Email already exists: jamppa.jamppanen@foo.com", ex.getMessage());
 ```
 
 
@@ -235,11 +259,14 @@ The same in Clojure:
 
 As you can see from the example in Clojure and Javascript we can treat data as data, in Java not so much.
 
+
 # Conclusions
+
 
 ## Spring and Spring Boot
 
 Spring Boot makes creating server / microservice applications using Java much easier. Spring provides a great framework which glues your components together and provides an overall framework to make things easier. It's hard to find a reason not to use Spring (i.e. to create a pure EE Java app). 
+
 
 ## Java as a Language
 

@@ -16,4 +16,5 @@ public class User {
         this.lastName = lastName;
         this.hashedPassword = hashedPassword;
     }
+
 }
