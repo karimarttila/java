@@ -35,4 +35,13 @@ public interface Users {
      * @throws simpleserver.util.SSException if failure
      */
     User addUser(String newEmail, String firstName, String lastName, String password);
+
+    /**
+     * Checks if can find credentials (email + password).
+     *
+     * @param userEmail User's email
+     * @param userPassword User's password
+     * @return true if found credentials in user db, false otherwise
+     */
+    boolean checkCredentials(String userEmail, String userPassword);
 }

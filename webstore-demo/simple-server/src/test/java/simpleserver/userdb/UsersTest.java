@@ -41,6 +41,7 @@ class UsersTest {
         logger.debug(Consts.LOG_EXIT);
     }
 
+
     @DisplayName("Tests adding a new user")
     @Test
     void addUserTest() {
@@ -58,7 +59,16 @@ class UsersTest {
         };
         SSException ex = assertThrows(SSException.class, codeToTest);
         assertEquals("Email already exists: jamppa.jamppanen@foo.com", ex.getMessage());
-
         logger.debug(Consts.LOG_EXIT);
+    }
+
+
+    @DisplayName("Tests checking user credentials")
+    @Test
+    void checkCredentialsTest() {
+        logger.debug(Consts.LOG_ENTER);
+        assertTrue(users.checkCredentials("kari.karttinen@foo.com", "Kari"));
+        assertTrue(!users.checkCredentials("NOT-FOUND.karttinen@foo.com", "Kari"));
+        assertTrue(!users.checkCredentials("kari.karttinen@foo.com", "WRONG-PASSWORD"));
     }
 }

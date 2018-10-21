@@ -91,4 +91,17 @@ public class UsersImpl implements Users {
         logger.debug(Consts.LOG_EXIT);
         return user;
     }
+
+    @Override
+    public boolean checkCredentials(String userEmail, String userPassword) {
+        logger.debug(Consts.LOG_ENTER);
+        String userHashedPassword = DigestUtils.md5Hex(userPassword).toUpperCase();
+        Collection<User> users = syncUserDb.values();
+        List<User> filteredUsers = users.stream().filter( thisUser ->
+                ((thisUser.email.equals(userEmail)) &&
+                        (thisUser.hashedPassword.equals(userHashedPassword)))).collect(Collectors.toList());
+        boolean ret = (!filteredUsers.isEmpty());
+        logger.debug("{}, ret: {}", Consts.LOG_EXIT, ret);
+        return ret;
+    }
 }
