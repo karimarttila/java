@@ -7,9 +7,6 @@ import simpleserver.util.Consts;
 import org.springframework.stereotype.Service;
 import simpleserver.util.SSErrorCode;
 import simpleserver.util.SSException;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -29,7 +26,7 @@ public class UsersImpl implements Users {
      * to be thread safe.
      */
     private final Map<String, User> syncUserDb =
-            Collections.synchronizedMap(new HashMap<String, User>());
+            Collections.synchronizedMap(new HashMap<>());
     /**
      * The Counter. Access synchronized on method level.
      */
@@ -64,7 +61,7 @@ public class UsersImpl implements Users {
 
     @Override
     public Map getUsers() {
-        return new HashMap<String, User>(syncUserDb);
+        return new HashMap<>(syncUserDb);
     }
 
     @Override
@@ -81,14 +78,7 @@ public class UsersImpl implements Users {
     @Override
     public User addUser(String newEmail, String firstName, String lastName, String password) {
         logger.debug(Consts.LOG_ENTER);
-        User user = null;
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        }
-        catch (NoSuchAlgorithmException e) {
-            throw new SSException("Unknown hashing algorithm MD5", e, SSErrorCode.SERVER_ERROR);
-        }
+        User user;
         if (!emailAlreadyExists(newEmail)) {
             long id = counter();
             String hashedPassword = DigestUtils.md5Hex(password).toUpperCase();

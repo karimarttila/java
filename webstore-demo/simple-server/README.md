@@ -88,6 +88,15 @@ Example script [run-ss-container-sonarqube-analysis.sh](run-ss-container-sonarqu
 
 # Java Static Code Analysis
 
+IntelliJ IDEA supports two good static code analysis ways:
+
+**[Analyze / Inspect code](https://www.jetbrains.com/help/idea/code-inspection.html).** This is an IntelliJ IDEA build in inspection tool. It can detect various language and runtime errors, suggest various corrections etc. It's actually a pretty good tool for clean your code and also learn new language features. You can configure the tool pretty much you like, and create your own project specific profiles. E.g. I supressed warning related weaker access for DTO classes (i.e. fields are intentionally public and Code Inspection suggested that the fields should be private - you can easily supress these warning by adding annotation```java @SuppressWarnings("WeakerAccess")``` before the class defintion in the source file).
+
+**[SonarLint](https://plugins.jetbrains.com/plugin/7973-sonarlint).** There are quite a few linters for Java code but one of the most used is SonarLint.  
+
+
+
+
 TODO: Analyze: tell something about IntelliJ IDEA...
 
 

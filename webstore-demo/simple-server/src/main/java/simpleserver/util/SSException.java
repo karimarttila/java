@@ -3,6 +3,7 @@ package simpleserver.util;
 /**
  * The type Simple Server exception.
  */
+@SuppressWarnings("unused")
 public class SSException extends RuntimeException {
 
     private static final long serialVersionUID = -1931005380014655090L;

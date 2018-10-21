@@ -7,15 +7,15 @@ public class Product {
 
     // We provide fields as public since there is no reason why they should
     // be private in a simple DTO class like this.
-    public int pgId;
-    public int pId;
-    public String title;
-    public double price;
+    public final int pgId;
+    public final int pId;
+    public final String title;
+    public final double price;
     // Let's have a minor shortcut for our OO model...
-    public String author_or_director;
-    public int year;
-    public String country;
-    public String genre_or_language;
+    public final String author_or_director;
+    public final int year;
+    public final String country;
+    public final String genre_or_language;
 
 
     /**

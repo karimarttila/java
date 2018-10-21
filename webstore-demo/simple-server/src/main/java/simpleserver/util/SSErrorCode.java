@@ -1,5 +1,6 @@
 package simpleserver.util;
 
+@SuppressWarnings("unused")
 public enum  SSErrorCode {
 
     // Simple Server application errors 100-
@@ -8,9 +9,9 @@ public enum  SSErrorCode {
     // Server errors 500-
     SERVER_ERROR(500);
 
-    private int errorCode;
+    private final int errorCode;
 
-    private SSErrorCode(int errorCode) {
+    SSErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
 

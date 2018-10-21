@@ -28,10 +28,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class DomainImpl implements Domain {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ResourceLoader resourceLoader;
     // Map for products in products group (key: product group id).
-    Map<String, List<Product>> syncProductsCache = Collections.synchronizedMap(new HashMap<String, List<Product>>());
+    private final Map<String, List<Product>> syncProductsCache =
+            Collections.synchronizedMap(new HashMap<>());
 
     @Autowired
     public DomainImpl(ResourceLoader resourceLoader) {
@@ -97,10 +99,10 @@ public class DomainImpl implements Domain {
         logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId);
         products = syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
-            logger.debug(" Loading pgId "+ pgId + " to cache", pgId);
+            logger.debug(" Loading pgId {0} to cache", pgId);
             String productsFile = "pg-" + pgId + "-products.csv";
             List<String[]> csvList = readCsv(productsFile);
-            List<Product> newProductsCache = new ArrayList<Product>();
+            List<Product> newProductsCache = new ArrayList<>();
             if (csvList != null) {
                 csvList.forEach((item) -> {
                     int pId = Integer.parseInt(item[0]);
@@ -110,6 +112,7 @@ public class DomainImpl implements Domain {
                     String author_or_director = item[4];
                     int year = Integer.parseInt(item[5]);
                     String country = item[6];
+                    // @java.lang.SuppressWarnings("squid:S00117")
                     String genre_or_language = item[7];
                     Product product = new Product(myPgId, pId, title, price,
                             author_or_director, year, country,
@@ -127,7 +130,7 @@ public class DomainImpl implements Domain {
 
     @Override
     public Product getProduct(int pgId, int pId) {
-        logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId + ", pId: " + pId);
+        logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId + ", pId: ", pId);
         var products =  syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             products = getProducts(pgId);
@@ -142,11 +145,11 @@ public class DomainImpl implements Domain {
                 product = result.get(0);
             }
             else {
-                logger.error("Didn't find exactly one product, count is: " + result.size());
+                logger.error("Didn't find exactly one product, count is: {0}", result.size());
             }
         }
         else {
-            logger.error("Couldn't find products for pgId: " + pgId);
+            logger.error("Couldn't find products for pgId: {0}", pgId);
         }
         logger.debug(Consts.LOG_EXIT);
         return product;

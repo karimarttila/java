@@ -31,7 +31,7 @@ public class DomainTest {
 
     @DisplayName("Tests getting the info")
     @Test
-    public void getInfoTest() {
+    void getInfoTest() {
         logger.debug(Consts.LOG_ENTER);
         Info info = domain.getInfo();
         String infoStr = info.getInfo();
@@ -42,7 +42,7 @@ public class DomainTest {
 
     @DisplayName("Tests getting the product groups")
     @Test
-    public void getProductGroupsTest() {
+    void getProductGroupsTest() {
         logger.debug(Consts.LOG_ENTER);
         ProductGroups productGroups = domain.getProductGroups();
         Map<String, String> pg = productGroups.getProductGroups();
@@ -55,7 +55,7 @@ public class DomainTest {
 
     @DisplayName("Tests getting the products")
     @Test
-    public void getProductsTest() {
+    void getProductsTest() {
         logger.debug(Consts.LOG_ENTER);
         List<Product> books = domain.getProducts(1);
         assertNotNull(books);
@@ -72,7 +72,7 @@ public class DomainTest {
 
     @DisplayName("Tests getting the product")
     @Test
-    public void getProductTest() {
+    void getProductTest() {
         logger.debug(Consts.LOG_ENTER);
         Product product = domain.getProduct(2, 49);
         assertNotNull(product);

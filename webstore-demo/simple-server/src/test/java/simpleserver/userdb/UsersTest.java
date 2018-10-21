@@ -31,7 +31,7 @@ public class UsersTest {
 
     @DisplayName("Tests if email already exists")
     @Test
-    public void emailAlreadyExistsTest() {
+    void emailAlreadyExistsTest() {
         logger.debug(Consts.LOG_ENTER);
         boolean retOk = users.emailAlreadyExists("kari.karttinen@foo.com");
         boolean retNotOk = users.emailAlreadyExists("NOT.FOUND@foo.com");
@@ -42,7 +42,7 @@ public class UsersTest {
 
     @DisplayName("Tests adding a new user")
     @Test
-    public void addUserTest() {
+    void addUserTest() {
         logger.debug(Consts.LOG_ENTER);
         Map<String, User> currentUsers = users.getUsers();
         assertEquals(3, currentUsers.size());
@@ -60,9 +60,4 @@ public class UsersTest {
 
         logger.debug(Consts.LOG_EXIT);
     }
-
-
-
-
-
 }
