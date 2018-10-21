@@ -22,7 +22,8 @@ import simpleserver.util.Consts;
 @DisplayName("Domain test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DomainImpl.class})
-public class DomainTest {
+class DomainTest {
+    @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired

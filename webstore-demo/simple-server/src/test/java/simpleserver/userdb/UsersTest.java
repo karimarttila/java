@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("Users test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {UsersImpl.class})
-public class UsersTest {
+class UsersTest {
+    @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired

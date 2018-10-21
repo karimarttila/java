@@ -14,7 +14,7 @@ public interface Users {
      *
      * @return Users
      */
-    Map getUsers();
+    Map<String, User> getUsers();
 
     /**
      * Checks if given email already exists in the user db.

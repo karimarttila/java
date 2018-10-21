@@ -1,7 +1,5 @@
 package simpleserver.webserver;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,19 +15,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import java.io.IOException;
 import java.util.HashMap;
 import simpleserver.util.Consts;
 
 
+
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(Server.class)
-public class ServerTest {
+class ServerTest {
+    @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired

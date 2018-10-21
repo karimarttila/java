@@ -7,10 +7,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 @Configuration
 @ComponentScan(basePackages = {"simpleserver"})
-public class WebTestConfiguration implements WebMvcConfigurer, ApplicationContextAware {
+class WebTestConfiguration implements WebMvcConfigurer, ApplicationContextAware {
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private ApplicationContext applicationContext;
 
     @Override

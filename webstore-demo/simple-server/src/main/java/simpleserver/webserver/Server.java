@@ -3,10 +3,7 @@ package simpleserver.webserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import simpleserver.domaindb.Domain;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.Product;
@@ -46,7 +43,7 @@ public class Server {
      *
      * @return the info.
      */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @GetMapping(path = "/info")
     public Info getInfo() {
         logger.debug(Consts.LOG_ENTER);
         Info info = domain.getInfo();
@@ -59,7 +56,7 @@ public class Server {
      *
      * @return the product groups
      */
-    @RequestMapping(value = "/product-groups", method = RequestMethod.GET)
+    @GetMapping(path = "/product-groups")
     public Map<String, Object> getProductGroups() {
         logger.debug(Consts.LOG_ENTER);
         ProductGroups productGroups = domain.getProductGroups();
@@ -75,7 +72,7 @@ public class Server {
      *
      * @return the products
      */
-    @RequestMapping(value = "/products/{pgId}", method = RequestMethod.GET)
+    @GetMapping(path = "/products/{pgId}")
     public Map<String, Object>  getProducts(
             @PathVariable("pgId") int pgId) {
         logger.debug(Consts.LOG_ENTER);
@@ -92,7 +89,7 @@ public class Server {
      *
      * @return the product
      */
-    @RequestMapping(value = "/product/{pgId}/{pId}", method = RequestMethod.GET)
+    @GetMapping(path = "/product/{pgId}/{pId}")
     public Map<String, Object>  getProducts(
             @PathVariable("pgId") int pgId, @PathVariable("pId") int pId) {
         logger.debug(Consts.LOG_ENTER);

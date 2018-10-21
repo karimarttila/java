@@ -20,10 +20,10 @@ public class ProductOkResponseImpl implements Response {
         productView[1] = Integer.toString(product.pgId);
         productView[2] = product.title;
         productView[3] = Double.toString(product.price);
-        productView[4] = product.author_or_director;
+        productView[4] = product.authorOrDirector;
         productView[5] = Integer.toString(product.year);
         productView[6] = product.country;
-        productView[7] = product.genre_or_language;
+        productView[7] = product.genreOrLanguage;
         response.put("product", productView);
     }
 

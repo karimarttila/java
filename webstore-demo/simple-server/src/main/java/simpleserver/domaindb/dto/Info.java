@@ -6,7 +6,7 @@ package simpleserver.domaindb.dto;
  */
 public class Info {
 
-    private static final String info = "index.html => Info in HTML format";
+    private static final String INFO_MSG = "index.html => Info in HTML format";
     /**
      * Gets info as json. Used in testing.
      * Not needed in production since Spring controller creates the mapping
@@ -15,7 +15,7 @@ public class Info {
      * @return the info
      */
     public String getInfo() {
-        return info;
+        return INFO_MSG;
     }
 
 }

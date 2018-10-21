@@ -60,7 +60,7 @@ public class UsersImpl implements Users {
 
 
     @Override
-    public Map getUsers() {
+    public Map<String, User> getUsers() {
         return new HashMap<>(syncUserDb);
     }
 
@@ -70,8 +70,8 @@ public class UsersImpl implements Users {
         Collection<User> users = syncUserDb.values();
         List<User> filteredUsers = users.stream().filter( thisUser ->
                 (thisUser.email.equals(givenEmail))).collect(Collectors.toList());
-        boolean ret = (filteredUsers.size() > 0);
-        logger.debug(Consts.LOG_EXIT + ", ret: " + ret);
+        boolean ret = (!filteredUsers.isEmpty());
+        logger.debug("{}, ret: {}", Consts.LOG_EXIT, ret);
         return ret;
     }
 

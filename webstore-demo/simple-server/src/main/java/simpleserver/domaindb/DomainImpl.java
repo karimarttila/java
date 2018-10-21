@@ -48,7 +48,7 @@ public class DomainImpl implements Domain {
      * @return CSV file content as List of String arrays.
      */
     private List<String[]> readCsv(String fileName) {
-        logger.debug(Consts.LOG_ENTER + ", fileName: " + fileName);
+        logger.debug("{}, fileName: {}",Consts.LOG_ENTER, fileName);
         List<String[]> ret = null;
         Resource res = resourceLoader.getResource("classpath:" + fileName);
         CSVParser parser = new CSVParserBuilder().withSeparator('\t').build();
@@ -58,7 +58,7 @@ public class DomainImpl implements Domain {
         ) {
             ret = csvReader.readAll();
         } catch (IOException e) {
-            logger.error("Error while processing csv: %s", e.getMessage());
+            logger.error("Error while processing csv: {}", e.getMessage());
         }
 
         logger.debug(Consts.LOG_EXIT);
@@ -82,7 +82,7 @@ public class DomainImpl implements Domain {
         String productGroupFile = "product-groups.csv";
         List<String[]> csvList = readCsv(productGroupFile);
         if (csvList != null) {
-            csvList.forEach((item) -> {
+            csvList.forEach(item -> {
                 String key = item[0];
                 String value = item[1];
                 productGroups.addProductGroup(key, value);
@@ -96,27 +96,26 @@ public class DomainImpl implements Domain {
     @Override
     public List<Product> getProducts(int pgId) {
         List<Product> products;
-        logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId);
+        logger.debug("{}, pgId: {}", Consts.LOG_ENTER, pgId);
         products = syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
-            logger.debug(" Loading pgId {0} to cache", pgId);
+            logger.debug(" Loading pgId {} to cache", pgId);
             String productsFile = "pg-" + pgId + "-products.csv";
             List<String[]> csvList = readCsv(productsFile);
             List<Product> newProductsCache = new ArrayList<>();
             if (csvList != null) {
-                csvList.forEach((item) -> {
+                csvList.forEach(item -> {
                     int pId = Integer.parseInt(item[0]);
                     int myPgId = Integer.parseInt(item[1]);
                     String title = item[2];
                     double price = Double.parseDouble(item[3]);
-                    String author_or_director = item[4];
+                    String authorOrDirector = item[4];
                     int year = Integer.parseInt(item[5]);
                     String country = item[6];
-                    // @java.lang.SuppressWarnings("squid:S00117")
-                    String genre_or_language = item[7];
+                    String genreOrLanguage = item[7];
                     Product product = new Product(myPgId, pId, title, price,
-                            author_or_director, year, country,
-                            genre_or_language);
+                            authorOrDirector, year, country,
+                            genreOrLanguage);
                     newProductsCache.add(product);
                 });
             }
@@ -130,7 +129,7 @@ public class DomainImpl implements Domain {
 
     @Override
     public Product getProduct(int pgId, int pId) {
-        logger.debug(Consts.LOG_ENTER + ", pgId: " + pgId + ", pId: ", pId);
+        logger.debug("{}, pgId: {}, pId: {}", Consts.LOG_ENTER, pgId, pId);
         var products =  syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             products = getProducts(pgId);
@@ -145,11 +144,11 @@ public class DomainImpl implements Domain {
                 product = result.get(0);
             }
             else {
-                logger.error("Didn't find exactly one product, count is: {0}", result.size());
+                logger.error("Didn't find exactly one product, count is: {}", result.size());
             }
         }
         else {
-            logger.error("Couldn't find products for pgId: {0}", pgId);
+            logger.error("Couldn't find products for pgId: {}", pgId);
         }
         logger.debug(Consts.LOG_EXIT);
         return product;

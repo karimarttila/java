@@ -12,10 +12,10 @@ public class Product {
     public final String title;
     public final double price;
     // Let's have a minor shortcut for our OO model...
-    public final String author_or_director;
+    public final String authorOrDirector;
     public final int year;
     public final String country;
-    public final String genre_or_language;
+    public final String genreOrLanguage;
 
 
     /**
@@ -25,22 +25,23 @@ public class Product {
      * @param pId                the product id
      * @param title              the title
      * @param price              the price
-     * @param author_or_director the author or director
+     * @param authorOrDirector the author or director
      * @param year               the year
      * @param country            the country
-     * @param genre_or_language  the genre or language
+     * @param genreOrLanguage  the genre or language
      */
+    @SuppressWarnings({"squid:S00107"})
     public Product(int pgId, int pId, String title, double price,
-                   String author_or_director, int year,
-                   String country, String genre_or_language) {
+                   String authorOrDirector, int year,
+                   String country, String genreOrLanguage) {
         this.pgId = pgId;
         this.pId = pId;
         this.title = title;
         this.price = price;
-        this.author_or_director = author_or_director;
+        this.authorOrDirector = authorOrDirector;
         this.year = year;
         this.country = country;
-        this.genre_or_language = genre_or_language;
+        this.genreOrLanguage = genreOrLanguage;
     }
 
 }
