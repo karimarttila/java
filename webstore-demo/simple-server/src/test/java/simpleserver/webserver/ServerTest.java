@@ -64,43 +64,34 @@ class ServerTest {
 
 
     @Test
-    void postOkSigninTest() throws Exception {
+    void postSigninTest() throws Exception {
         logger.debug(Consts.LOG_ENTER);
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/signin")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{ " +
+        String requestBody = "{ " +
                         "\"email\": \"jamppa.jamppanen@foo.com\"," +
                         " \"first-name\": \"Jamppa\"," +
                         " \"last-name\": \"Jamppanen\"," +
                         " \"password\": \"JampanSalasana\"" +
-                        " }")
+                        " }";
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/signin")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.ret").value("ok"))
                 .andExpect(jsonPath("$.email").value("jamppa.jamppanen@foo.com"))
                 .andReturn();
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
-    }
-
-
-    @Test
-    void postEmailAlreadyExistsSigninTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/signin")
+        // Check that cannot add another time.
+        builder = MockMvcRequestBuilders.post("/signin")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{ " +
-                        "\"email\": \"kari.karttinen@foo.com\"," +
-                        " \"first-name\": \"Kari\"," +
-                        " \"last-name\": \"Karttinen\"," +
-                        " \"password\": \"KarinSalasana\"" +
-                        " }")
+                .content(requestBody)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
-        MvcResult mvcResult = this.mockMvc.perform(builder)
+        mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().is(400))
                 .andExpect(jsonPath("$.ret").value("failed"))
                 .andExpect(jsonPath("$.msg").value("Email already exists"))
                 .andReturn();
+
         logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
     }
 
