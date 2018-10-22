@@ -12,4 +12,10 @@ public interface Response {
      * @return the response
      */
     Map<String, Object> getRestView();
+
+    /**
+     * Tells if the response is ok.
+     * @return true if ok, false otherwise
+     */
+    boolean isOk();
 }

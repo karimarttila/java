@@ -11,6 +11,7 @@ import simpleserver.domaindb.dto.Product;
 public class ProductsOkResponseImpl implements Response {
     private final Map<String, Object> response = new HashMap<>();
 
+
     private ProductsOkResponseImpl(int myPgId, List<Product> products) {
         response.put("ret", "ok");
         String pgId = Integer.toString(myPgId);
@@ -27,14 +28,21 @@ public class ProductsOkResponseImpl implements Response {
         response.put("products", productsView);
     }
 
+
     public static Response createProductsOkResponse(int pgId, List<Product> products) {
         return new ProductsOkResponseImpl(pgId, products);
     }
+
 
     @Override
     public Map<String, Object> getRestView() {
         return response;
     }
 
+
+    @Override
+    public boolean isOk() {
+        return true;
+    }
 }
 

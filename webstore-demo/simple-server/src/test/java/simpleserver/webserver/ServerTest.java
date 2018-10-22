@@ -17,9 +17,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import java.util.HashMap;
-import simpleserver.util.Consts;
 
+import java.util.Collections;
+import java.util.HashMap;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import simpleserver.util.Consts;
+import simpleserver.webserver.dto.Signin;
 
 
 @ExtendWith(SpringExtension.class)
@@ -44,8 +49,9 @@ class ServerTest {
         HashMap<String, String> expectedResult = new HashMap<>();
         expectedResult.put("info", "index.html => Info in HTML format");
         String expectedResultJson = new JSONObject(expectedResult).toString();
-
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/info").contentType(MediaType.APPLICATION_JSON_UTF8)
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .get("/info")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -54,6 +60,48 @@ class ServerTest {
 
         logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
 
+    }
+
+
+    @Test
+    void postOkSigninTest() throws Exception {
+        logger.debug(Consts.LOG_ENTER);
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/signin")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{ " +
+                        "\"email\": \"jamppa.jamppanen@foo.com\"," +
+                        " \"first-name\": \"Jamppa\"," +
+                        " \"last-name\": \"Jamppanen\"," +
+                        " \"password\": \"JampanSalasana\"" +
+                        " }")
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.ret").value("ok"))
+                .andExpect(jsonPath("$.email").value("jamppa.jamppanen@foo.com"))
+                .andReturn();
+        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+    }
+
+
+    @Test
+    void postEmailAlreadyExistsSigninTest() throws Exception {
+        logger.debug(Consts.LOG_ENTER);
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/signin")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{ " +
+                        "\"email\": \"kari.karttinen@foo.com\"," +
+                        " \"first-name\": \"Kari\"," +
+                        " \"last-name\": \"Karttinen\"," +
+                        " \"password\": \"KarinSalasana\"" +
+                        " }")
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().is(400))
+                .andExpect(jsonPath("$.ret").value("failed"))
+                .andExpect(jsonPath("$.msg").value("Email already exists"))
+                .andReturn();
+        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
     }
 
 
@@ -68,7 +116,9 @@ class ServerTest {
         expectedResult.put("product-groups", productGroups);
         String expectedResultJson = new JSONObject(expectedResult).toString();
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/product-groups").contentType(MediaType.APPLICATION_JSON_UTF8)
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .get("/product-groups")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -82,8 +132,9 @@ class ServerTest {
     @Test
     void getProductsTest() throws Exception {
         logger.debug(Consts.LOG_ENTER);
-
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/products/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .get("/products/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -99,8 +150,9 @@ class ServerTest {
     @Test
     void getProductTest() throws Exception {
         logger.debug(Consts.LOG_ENTER);
-
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/product/2/49").contentType(MediaType.APPLICATION_JSON_UTF8)
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .get("/product/2/49")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())

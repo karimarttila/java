@@ -5,8 +5,13 @@ import simpleserver.domaindb.dto.Product;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Product ok response.
+ */
 public class ProductOkResponseImpl implements Response {
+
     private final Map<String, Object> response = new HashMap<>();
+
 
     private ProductOkResponseImpl(Product product) {
         response.put("ret", "ok");
@@ -27,13 +32,26 @@ public class ProductOkResponseImpl implements Response {
         response.put("product", productView);
     }
 
+
+    /**
+     * Create product ok response.
+     *
+     * @param product the product
+     * @return the response
+     */
     public static Response createProductOkResponse(Product product) {
         return new ProductOkResponseImpl(product);
     }
+
 
     @Override
     public Map<String, Object> getRestView() {
         return response;
     }
 
+
+    @Override
+    public boolean isOk() {
+        return true;
+    }
 }
