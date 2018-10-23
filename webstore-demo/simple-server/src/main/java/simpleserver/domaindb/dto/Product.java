@@ -3,6 +3,7 @@ package simpleserver.domaindb.dto;
 /**
  * Product entity.
  */
+@SuppressWarnings({"squid:S00107", "RedundantSuppression"})
 public class Product {
 
     // We provide fields as public since there is no reason why they should
@@ -30,7 +31,6 @@ public class Product {
      * @param country            the country
      * @param genreOrLanguage  the genre or language
      */
-    @SuppressWarnings({"squid:S00107"})
     public Product(int pgId, int pId, String title, double price,
                    String authorOrDirector, int year,
                    String country, String genreOrLanguage) {

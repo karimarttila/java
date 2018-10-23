@@ -1,5 +1,7 @@
 package simpleserver.webserver;
 
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,6 @@ import simpleserver.util.SSErrorCode;
 import simpleserver.util.SSException;
 import simpleserver.webserver.dto.Signin;
 import simpleserver.webserver.response.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 
 /**
  * The Server (Spring controller).
@@ -59,7 +56,7 @@ public class Server {
         if (params == null) {
             throw new IllegalArgumentException("params is null in validateParameters");
         }
-        ret = !(params.stream().anyMatch( item -> ((item == null) || (item.isEmpty()))));
+        ret = params.stream().noneMatch(item -> ((item == null) || (item.isEmpty())));
         logger.debug(Consts.LOG_EXIT);
         return ret;
     }
@@ -85,7 +82,7 @@ public class Server {
      * @return response regarding if the signin was successful
      */
     @PostMapping(path = "/signin")
-    public ResponseEntity<Map<String, Object>> postSignIn(@RequestBody Signin signin) {
+    public ResponseEntity<Map> postSignIn(@RequestBody Signin signin) {
         logger.debug(Consts.LOG_ENTER);
         Response response;
         var params = signin.getParamsAsList();
@@ -118,7 +115,7 @@ public class Server {
             }
         }
         HttpStatus httpStatus = response.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-        ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity(response.getRestView(), httpStatus);
+        ResponseEntity<Map> responseEntity = new ResponseEntity<>(response.getRestView(), httpStatus);
         logger.debug(Consts.LOG_EXIT);
         return responseEntity;
     }
