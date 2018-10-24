@@ -94,11 +94,6 @@ IntelliJ IDEA supports two good static code analysis ways:
 **[SonarLint](https://plugins.jetbrains.com/plugin/7973-sonarlint).** There are quite a few linters for Java code but one of the most used is SonarLint.  
 
 
-
-
-TODO: Analyze: tell something about IntelliJ IDEA...
-
-
 # Java REPL
 
 Java 9 introduced a shiny Java REPL for the Java developers)! This is nothing compared to Lisp REPLs but anyway it's nice to have a Java REPL at last. You can start a Java REPL session with command "jshell". 
@@ -313,6 +308,8 @@ As you can see from the example in Clojure and Javascript we can treat data as d
 
 Spring Boot makes creating server / microservice applications using Java much easier. Spring provides a great framework which glues your components together and provides an overall framework to make things easier. It's hard to find a reason not to use Spring (i.e. to create a pure EE Java app). 
 
+But remember: if you want to deviate from the default Spring Boot configuration (as I did when I used JUnit5 instead of JUnit4) you are pretty soon googling why some autowiring or servlet context or something is not working as it should.
+
 
 ## Java as a Language
 
@@ -326,9 +323,9 @@ Spring Boot makes creating server / microservice applications using Java much ea
 
 **IDE tooling.** IDE tooling is of course great since we are using statically typed language. [IntelliJ IDEA](https://www.jetbrains.com/idea/) (my favorite Java IDE) provides exact suggestions for methods when it recognizes which class we are dealing with.
 
-**Learning curve.** Difficult to say anything about this since I've been programming Java some 20 years now (first Java project was actually in year 1998). But after this exercise I have a feeling that for a newbie Java basic stuff cannot be learned in a couple of days and start being productive and learn the new stuff on the way as you can do e.g. with Python and Javascript. Also the frameworks take some time to learn (even a hard-core Java programmer like me forgot some peculiarities regarding Spring when I have not done serious Java/Spring programming about in 1,5 years).
+**Learning curve.** A bit difficult to say something about this since I've been programming Java some 20 years now (first Java project was actually in year 1998). But after this exercise I have a feeling that for a newbie programmer Java basic stuff cannot be learned in a couple of days and start being productive and learn the new stuff on the way as you can do e.g. with Python and Javascript. Also the frameworks take some time to learn (even a hard-core Java programmer like me forgot some peculiarities regarding Spring when I have not done serious Java/Spring programming about in 1,5 years). I think it is a lot easier for a Java guy to start using Javascript or Python than a Javascript guy start to use Java. Now after implementing the same web server using Javascript/Node and Java I can better understand why those Javascript guys despise Java so much - Java is far from Javascript/Node in developer productivity. But you don't have to leave JVM for Java's sins - you can start using Clojure and get the best of both worlds - a battle tested runtime (JVM) with a great functional and immutable language (Clojure).
 
-**Rigidness.** I have been programming Java some 20 years - I'm pretty seasoned Java programming. But even though I was a bit amazed myself regarding the productivity between Javascript/Node vs Java - I think I hassled with the Java implementation about the same time I implemented the same server in Javascript/Node and had to learn Javascript/Node on the fly while implementing the server - wtf? Have I really used such a non-productive language and runtime all these years? The main reason for this low productivity is that Java is so verbose and rigid. You have to implement class this and class that to make even minor functionality (if you want to make implementation Java-ish) - in the Javascript, Python and Clojure side you have a lot more freedom because the languages are dynamically typed and you can treat data as data and not as an unholy mix of classes with data and references to other classes.
+**Rigidness.** I have been programming Java some 20 years - I'm pretty seasoned Java programming. But even though I was a bit amazed myself regarding the productivity between Javascript/Node vs Java - I think I hassled with the Java implementation about the same time I implemented the same server in Javascript/Node and had to learn Javascript/Node on the fly while implementing the server - wtf? Have I really used such a non-productive language and runtime all these years? The main reason for this low productivity is that Java is so verbose and rigid. You have to implement class this and class that to make even minor functionality (if you want to make implementation Java-ish). In the Javascript, Python and Clojure side you have a lot more freedom because the languages are dynamically typed and you can treat data as data and not as an unholy mix of classes with data and references to other classes.
 
-**Summa summarum.** Java is not that bad. There are a lot of cons in Java: type safety, great ecosystem, JVM is battle tested runtime, great tooling, a huge developer pool etc. All these reasons make Java a great enterprise language for big critical enterprise projects when many developers need to work on the same code base. But the price is a verbose language with a rather slow development cycle. E.g. programming in Java really requires TDD since you can more easily develop your system in small increments when you use a good unit/integration test as a development bench (and you get a test suite as a by-product) - not a bad thing per se. Something you don't need e.g. in Clojure because you have a real Lisp REPL and you can grow your system in a more organic way with the REPL (and you still can create a good test suite).
+**Summa summarum.** Java is not that bad. There are a lot of cons in Java: type safety, great ecosystem, JVM is battle tested runtime, great tooling, a huge developer pool etc. All these reasons make Java a great enterprise language for big critical enterprise projects when many developers need to work on the same code base. But the price is a verbose and rigid language with a rather slow development cycle. E.g. programming in Java really requires TDD since you can more easily develop your system in small increments when you use a good unit/integration test as a development bench (and you get a test suite as a by-product) - not a bad thing per se. Something you don't need e.g. in Clojure because you have a real Lisp REPL and you can grow your system in a more organic way with the REPL (and you still can create a good test suite).
 
