@@ -14,9 +14,7 @@ import simpleserver.domaindb.dto.Product;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.userdb.Users;
 import simpleserver.userdb.dto.User;
-import simpleserver.util.Consts;
-import simpleserver.util.SSErrorCode;
-import simpleserver.util.SSException;
+import simpleserver.util.*;
 import simpleserver.webserver.dto.Signin;
 import simpleserver.webserver.response.*;
 
@@ -29,6 +27,7 @@ public class Server {
 
     private final Domain domain;
     private final Users users;
+    private final SSConfiguration config;
 
     /**
      * Instantiates a new Server.
@@ -36,11 +35,16 @@ public class Server {
      *
      * @param domain the domain
      * @param users the users
+     * @param config the configuration
+     *
      */
     @Autowired
-    public Server(Domain domain, Users users) {
+    public Server(Domain domain, Users users, SSConfiguration config) {
         this.domain = domain;
         this.users = users;
+        this.config = config;
+        logger.debug("******************************************************");
+        logger.info("Using application properties file in: {}", config.getApplicationPropertiesFilePath());
     }
 
 

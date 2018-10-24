@@ -3,38 +3,37 @@ package simpleserver.webserver;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import simpleserver.util.Consts;
+
+import java.util.HashMap;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import java.util.Collections;
-import java.util.HashMap;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import simpleserver.util.Consts;
-import simpleserver.webserver.dto.Signin;
-
-
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(Server.class)
+// NOTE: Spring Rest Controller test reads application.properties file
+// from /main/webapp directory!
+@SpringJUnitWebConfig(Server.class)
+@AutoConfigureMockMvc
+@ComponentScan(basePackages = {"simpleserver"})
 class ServerTest {
     @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private MockMvc mockMvc;
+
 
     @BeforeEach
     void setup() {
@@ -58,7 +57,7 @@ class ServerTest {
                 .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
                 .andReturn();
 
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
 
     }
 
@@ -67,11 +66,11 @@ class ServerTest {
     void postSigninTest() throws Exception {
         logger.debug(Consts.LOG_ENTER);
         String requestBody = "{ " +
-                        "\"email\": \"jamppa.jamppanen@foo.com\"," +
-                        " \"first-name\": \"Jamppa\"," +
-                        " \"last-name\": \"Jamppanen\"," +
-                        " \"password\": \"JampanSalasana\"" +
-                        " }";
+                "\"email\": \"jamppa.jamppanen@foo.com\"," +
+                " \"first-name\": \"Jamppa\"," +
+                " \"last-name\": \"Jamppanen\"," +
+                " \"password\": \"JampanSalasana\"" +
+                " }";
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/signin")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(requestBody)
@@ -91,8 +90,7 @@ class ServerTest {
                 .andExpect(jsonPath("$.ret").value("failed"))
                 .andExpect(jsonPath("$.msg").value("Email already exists"))
                 .andReturn();
-
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
     }
 
 
@@ -116,7 +114,7 @@ class ServerTest {
                 .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
                 .andReturn();
 
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
     }
 
 
@@ -134,7 +132,7 @@ class ServerTest {
                 .andExpect(jsonPath("$.products", hasSize(35)))
                 .andReturn();
 
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
     }
 
 
@@ -154,7 +152,7 @@ class ServerTest {
                 // What a coincidence! The chosen movie is the best western of all times!
                 .andExpect(jsonPath("$.product[2]").value("Once Upon a Time in the West"))
                 .andReturn();
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
     }
 
 }

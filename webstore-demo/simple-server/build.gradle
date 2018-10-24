@@ -62,6 +62,7 @@ ext{
     opencsvVersion = '4.3.1'
     jsonPathVersion = '2.4.0'
     commonsCodecVersion = '1.11'
+    jjwtVersion = '0.10.5'
 }
 
 
@@ -72,16 +73,19 @@ dependencies {
     compile("com.opencsv:opencsv:$opencsvVersion")
     compile("org.codehaus.groovy:groovy-all:$rootProject.ext.groovyVersion")
     compile("commons-codec:commons-codec:$rootProject.ext.commonsCodecVersion")
-    
+    compile("io.jsonwebtoken:jjwt-api:$rootProject.ext.jjwtVersion")
+    runtime("io.jsonwebtoken:jjwt-impl:$rootProject.ext.jjwtVersion")
+    runtime("io.jsonwebtoken:jjwt-jackson:$rootProject.ext.jjwtVersion")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'junit.junit'
+        exclude group: 'com.vaadin.external.google'
+    }
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:$junitVersion")       
     testCompile("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testCompile "org.mockito:mockito-core:2.+"
     testCompile("org.mockito:mockito-junit-jupiter:$mockitJunitJupiterVersion")
-    testCompile("org.springframework.boot:spring-boot-starter-test") {
-        exclude group: 'junit.junit'
-        exclude group: 'com.vaadin.external.google'
-    }
     testCompile("com.jayway.jsonpath:json-path:$jsonPathVersion")
 }
 

@@ -24,11 +24,6 @@ I have used the following tools and versions:
 - [Spring Boot](http://spring.io/projects/spring-boot) 2.0.5.RELEASE.
 
 
-# Music
-
-A lot of Blues was consumed during the programming sessions. Blues was provided by various online radio stations, but [Blues Radio](https://www.internet-radio.com/station/bluesradio/) deserves a special mentioning. If I could play blues guitar like those guys I wouldn't hack a day in my life but play blues all day long.
-
-
 # Gradle
 
 You can create the gradle wrapper using command:
@@ -45,6 +40,10 @@ Gradle wrapper is also provided in this Git repo in [gradle](gradle) directory.
 I remember back in mid 2000 when [Java EE](https://en.wikipedia.org/wiki/Java_Platform,_Enterprise_Edition) was really bloated and [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) came with its dependency injection and autowiring and made things easier. Well, Spring itself seems to be rather bloated nowadays and therefore we have [Spring Boot](http://spring.io/projects/spring-boot) which considerably makes building Spring applications easier.
 
 Simple Server is implemented using [Spring Boot](http://spring.io/projects/spring-boot) v. 2.0.5 which uses [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) v. 5.0.9 (see [Spring Boot Documentation - Appendix F. Dependency versions](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html). If you are familiar with Spring application Simple Server also uses autowiring extensively.
+
+Spring also causes quite a lot of issues. E.g. if you just forget one annotation you may spend a couple of hours to figuring out why some property is not injected properly. Spring is a black box and if everything is configured properly you are good to go. If not, then it is at times pretty frustrating to find the root cause from the black box. I never had this kind of configuration issues with Clojure or Python.
+
+One example of the Spring issues was when I decided not to use the JUnit4 testing framework which comes with Spring Boot 2 but to use JUnit5. Everything went well until I introduced configuration autowiring from application.properties file - suddenly the Spring Rest Controller tests started to fail (couldn't find the application.properties file from the servlet context...). I had to google quite a while until I figured out how to setup the Spring Rest Controller tests and where to put the damn application.properties file so that Spring can find them in those tests. The lesson of the story is: If you use Spring and Spring Boot exactly as it is configured by default everything (mostly) works just fine. But if you want to do something a bit differently - you may need to google quite a bit before you figure out how to make everything wired to run the tests and the application jar.
 
 
 # SonarQube
@@ -133,6 +132,19 @@ $2 ==> "87EE0597C41D7AB8C074D7DC4794716D"
 
 This is actually pretty nice and a wellcome addition to Java 9 - now we can test small code snippets like that without creating a bigger testing context.
 
+But you can mostly use it for small simple code snippet explorations. If you want to do anything more complex you soon find that you have to set jshell classpath this jar, and this jar, and then this jar and so on:
+
+```bash
+jshell> /env -class-path /home/kari/.gradle/caches/modules-2/files-2.1/io.jsonwebtoken/jjwt-api/0.10.5/4bcf9036f62a404d6abecfffb37eae9033248933/jjwt-api-0.10.5.jar:/home/kari/.gradle/caches/modules-2/files-2.1/io.jsonwebtoken/jjwt-impl/0.10.5/f6d6dc168128f40652ca973b212f483f0e0765e3/jjwt-impl-0.10.5.jar
+jshell> Key key1 = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+jshell> String jws1 = Jwts.builder().setSubject("TODO").signWith(key1).compact();
+|  java.lang.IllegalStateException thrown: Unable to discover any JSON Serializer implementations on the classpath.
+...
+find ~/.gradle/caches -iname "jackson*.jar" | wc -l
+25
+... right... let's forget that exploration for now.
+```
+
 
 # Logging
 
@@ -181,6 +193,11 @@ Using JUnit5 it is pretty nice to test e.g. exceptions:
         SSException ex = assertThrows(SSException.class, codeToTest);
         assertEquals("Email already exists: jamppa.jamppanen@foo.com", ex.getMessage());
 ```
+
+
+# Code Coverage
+
+Code coverage is a pretty easy to use in IntelliJ idea. In this new IntelliJ version IDEA recommends to use IntelliJ IDEA's own code coverage runner as instructed in the [IntelliJ IDEA Code Coverage](https://www.jetbrains.com/help/idea/code-coverage.html) documentation.
 
 
 # Java Verbosity

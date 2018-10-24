@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import simpleserver.util.Consts;
 
+
 @SpringBootApplication
 public class Core {
 
@@ -22,4 +23,5 @@ public class Core {
         logger.debug(Consts.LOG_EXIT);
 
     }
+
 }
