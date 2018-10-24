@@ -195,6 +195,26 @@ Using JUnit5 it is pretty nice to test e.g. exceptions:
 ```
 
 
+The tests take considerably more time in Java and Clojure than in Javascript/Node (because OS loads JVM, and JVM loads application and test classes and only then JVM lets testing framework to start the actual testing...):
+
+```bash
+$ time ./clean-build.sh
+BUILD SUCCESSFUL in 5s
+7 actionable tasks: 7 executed
+
+real    0m5.674s
+user    0m1.201s
+sys	0m0.085s
+```
+
+In the Javascript side:
+
+```bash
+ 28 passing (82ms)
+real    0m0.634s
+```
+
+
 # Code Coverage
 
 Code coverage is a pretty easy to use in IntelliJ idea. In this new IntelliJ version IDEA recommends to use IntelliJ IDEA's own code coverage runner as instructed in the [IntelliJ IDEA Code Coverage](https://www.jetbrains.com/help/idea/code-coverage.html) documentation.
@@ -307,6 +327,8 @@ Spring Boot makes creating server / microservice applications using Java much ea
 **IDE tooling.** IDE tooling is of course great since we are using statically typed language. [IntelliJ IDEA](https://www.jetbrains.com/idea/) (my favorite Java IDE) provides exact suggestions for methods when it recognizes which class we are dealing with.
 
 **Learning curve.** Difficult to say anything about this since I've been programming Java some 20 years now (first Java project was actually in year 1998). But after this exercise I have a feeling that for a newbie Java basic stuff cannot be learned in a couple of days and start being productive and learn the new stuff on the way as you can do e.g. with Python and Javascript. Also the frameworks take some time to learn (even a hard-core Java programmer like me forgot some peculiarities regarding Spring when I have not done serious Java/Spring programming about in 1,5 years).
+
+**Rigidness.** I have been programming Java some 20 years - I'm pretty seasoned Java programming. But even though I was a bit amazed myself regarding the productivity between Javascript/Node vs Java - I think I hassled with the Java implementation about the same time I implemented the same server in Javascript/Node and had to learn Javascript/Node on the fly while implementing the server - wtf? Have I really used such a non-productive language and runtime all these years? The main reason for this low productivity is that Java is so verbose and rigid. You have to implement class this and class that to make even minor functionality (if you want to make implementation Java-ish) - in the Javascript, Python and Clojure side you have a lot more freedom because the languages are dynamically typed and you can treat data as data and not as an unholy mix of classes with data and references to other classes.
 
 **Summa summarum.** Java is not that bad. There are a lot of cons in Java: type safety, great ecosystem, JVM is battle tested runtime, great tooling, a huge developer pool etc. All these reasons make Java a great enterprise language for big critical enterprise projects when many developers need to work on the same code base. But the price is a verbose language with a rather slow development cycle. E.g. programming in Java really requires TDD since you can more easily develop your system in small increments when you use a good unit/integration test as a development bench (and you get a test suite as a by-product) - not a bad thing per se. Something you don't need e.g. in Clojure because you have a real Lisp REPL and you can grow your system in a more organic way with the REPL (and you still can create a good test suite).
 
