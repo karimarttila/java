@@ -140,6 +140,64 @@ find ~/.gradle/caches -iname "jackson*.jar" | wc -l
 ... right... let's forget that exploration for now.
 ```
 
+**But IntelliJ IDEA to the rescue!** IntelliJ IDEA implements a nice version of the Java REPL. Check it in Tools / JShell Console. It is able to load all your dependencies to the JShell (also application classes), and the REPL editor is pretty nice. See following documents how to use it:
+
+- [Java 9 and IntelliJ IDEA](https://blog.jetbrains.com/idea/2017/09/java-9-and-intellij-idea/) => The chapter "**JShell**".
+- [StackOverFlow - How to add application classes to IntelliJ IDEA JShell](https://stackoverflow.com/questions/48143960/how-to-import-a-custom-class-in-intellij-jshell-console). NOTE: Remember to start JShell again once you have added your output classes to IDEA libraries! 
+
+Once you are ready you can write code snippets to IntelliJ IDEA JShell REPL. E.g.:
+
+```java
+import simpleserver.util.SSPropertiesImpl;
+import simpleserver.webserver.SessionImpl;
+SessionImpl session = new SessionImpl(new SSPropertiesImpl());
+String jwt = session.createJsonWebToken("jamppa.jamppanen@foo.com");
+System.out.println("jwt: " + jwt);
+
+```
+
+... and you get output in JShell console:
+
+```text
+import simpleserver.util.SSPropertiesImpl
+import simpleserver.webserver.SessionImpl
+
+field SessionImpl session = simpleserver.webserver.SessionImpl@2d0399f4
+
+field String jwt = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7IFwiZW1haWxcIjogXCJqYW1wcGEuamFtcHBhbmVuQGZvby5jb21cIiB9IiwiZXhwIjoxNTQwNDgzNDAzfQ.YnWPFow6xZ1pmvaWU03hGllKCj0pNiu-fxuA32H9nh0"
+19:03:23.947 [main] DEBUG simpleserver.webserver.SessionImpl - ENTER
+19:03:23.947 [main] DEBUG simpleserver.webserver.SessionImpl - EXIT
+
+System.out.println("jwt: " + jwt)
+jwt: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7IFwiZW1haWxcIjogXCJqYW1wcGEuamFtcHBhbmVuQGZvby5jb21cIiB9IiwiZXhwIjoxNTQwNDgzNDAzfQ.YnWPFow6xZ1pmvaWU03hGllKCj0pNiu-fxuA32H9nh0
+```
+
+Another example to experiment JSON Web Token creation and parsing:
+
+```java
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+String jws = Jwts.builder().setSubject("Jamppa").signWith(key).compact();
+String name = Jwts.parser().setSigningKey(key).parseClaimsJws(jws).getBody().getSubject();
+```
+
+JShell console:
+
+```text
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
+import java.security.Key
+field Key key = javax.crypto.spec.SecretKeySpec@5883e04
+field String jws = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKYW1wcGEifQ.PjF1ilMY_iq96wTE8ptDRH_zGaIrTU-mYmjy3SZmnos"
+field String name = "Jamppa"
+```
+
+Pretty nice? And how long did we have to wait for the Java REPL? Just some 20 years? And remember: This is just a code snippet REPL like Python or Node REPL, not a real REPL like a Lisp REPL, e.g. a Clojure REPL (see e.g. [Programming at the REPL: Introduction](https://clojure.org/guides/repl/introduction)). With a real Lisp REPL you can interact with the real program as it is and explore the program in a way no code snippet REPL or debugger can do. It's pretty impossible to explain it, you just have to learn Lisp (e.g. Clojure) and try it out.
+
 
 # Logging
 

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import simpleserver.util.Consts;
+import simpleserver.util.SSConsts;
 
 
 @SpringBootApplication
@@ -18,9 +18,9 @@ public class Core {
      * @param args Command line arguments
      */
     public static void main(String[] args) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         SpringApplication.run(Core.class, args);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
 
     }
 

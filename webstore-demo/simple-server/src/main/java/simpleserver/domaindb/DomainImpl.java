@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.domaindb.dto.Product;
-import simpleserver.util.Consts;
+import simpleserver.util.SSConsts;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +48,7 @@ public class DomainImpl implements Domain {
      * @return CSV file content as List of String arrays.
      */
     private List<String[]> readCsv(String fileName) {
-        logger.debug("{}, fileName: {}",Consts.LOG_ENTER, fileName);
+        logger.debug("{}, fileName: {}", SSConsts.LOG_ENTER, fileName);
         List<String[]> ret = null;
         Resource res = resourceLoader.getResource("classpath:" + fileName);
         CSVParser parser = new CSVParserBuilder().withSeparator('\t').build();
@@ -61,7 +61,7 @@ public class DomainImpl implements Domain {
             logger.error("Error while processing csv: {}", e.getMessage());
         }
 
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return ret;
     }
 
@@ -69,8 +69,8 @@ public class DomainImpl implements Domain {
     @Override
     public Info getInfo() {
         var info = new Info();
-        logger.debug(Consts.LOG_ENTER);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_EXIT);
         return info;
     }
 
@@ -78,7 +78,7 @@ public class DomainImpl implements Domain {
     @Override
     public ProductGroups getProductGroups() {
         var productGroups = new ProductGroups();
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         String productGroupFile = "product-groups.csv";
         List<String[]> csvList = readCsv(productGroupFile);
         if (csvList != null) {
@@ -88,7 +88,7 @@ public class DomainImpl implements Domain {
                 productGroups.addProductGroup(key, value);
             });
         }
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return productGroups;
     }
 
@@ -96,7 +96,7 @@ public class DomainImpl implements Domain {
     @Override
     public List<Product> getProducts(int pgId) {
         List<Product> products;
-        logger.debug("{}, pgId: {}", Consts.LOG_ENTER, pgId);
+        logger.debug("{}, pgId: {}", SSConsts.LOG_ENTER, pgId);
         products = syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             logger.debug(" Loading pgId {} to cache", pgId);
@@ -122,14 +122,14 @@ public class DomainImpl implements Domain {
             syncProductsCache.put(Integer.toString(pgId), newProductsCache);
             products = newProductsCache;
         }
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return products;
     }
 
 
     @Override
     public Product getProduct(int pgId, int pId) {
-        logger.debug("{}, pgId: {}, pId: {}", Consts.LOG_ENTER, pgId, pId);
+        logger.debug("{}, pgId: {}, pId: {}", SSConsts.LOG_ENTER, pgId, pId);
         var products =  syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             products = getProducts(pgId);
@@ -150,7 +150,7 @@ public class DomainImpl implements Domain {
         else {
             logger.error("Couldn't find products for pgId: {}", pgId);
         }
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return product;
     }
 }

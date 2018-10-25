@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @PropertySource("application.properties")
-public class SSConfigurationImpl implements  SSConfiguration {
+public class SSPropertiesImpl implements SSProperties {
 
     @Value("${json-web-token-expiration-as-seconds}")
     private int jsonWebTokenExpirationSeconds;

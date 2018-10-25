@@ -15,7 +15,7 @@ import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.userdb.Users;
 import simpleserver.userdb.dto.User;
 import simpleserver.util.*;
-import simpleserver.webserver.dto.Signin;
+import simpleserver.webserver.dto.SigninData;
 import simpleserver.webserver.response.*;
 
 /**
@@ -27,7 +27,6 @@ public class Server {
 
     private final Domain domain;
     private final Users users;
-    private final SSConfiguration config;
 
     /**
      * Instantiates a new Server.
@@ -35,16 +34,15 @@ public class Server {
      *
      * @param domain the domain
      * @param users the users
-     * @param config the configuration
+     * @param props the configuration
      *
      */
     @Autowired
-    public Server(Domain domain, Users users, SSConfiguration config) {
+    public Server(Domain domain, Users users, SSProperties props) {
         this.domain = domain;
         this.users = users;
-        this.config = config;
         logger.debug("******************************************************");
-        logger.info("Using application properties file in: {}", config.getApplicationPropertiesFilePath());
+        logger.info("Using application properties file in: {}", props.getApplicationPropertiesFilePath());
     }
 
 
@@ -55,13 +53,13 @@ public class Server {
      * @return true if parameters ok, false otherwise
      */
     private boolean validateParameters(List<String> params) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         boolean ret;
         if (params == null) {
             throw new IllegalArgumentException("params is null in validateParameters");
         }
         ret = params.stream().noneMatch(item -> ((item == null) || (item.isEmpty())));
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return ret;
     }
 
@@ -73,9 +71,9 @@ public class Server {
      */
     @GetMapping(path = "/info")
     public Info getInfo() {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Info info = domain.getInfo();
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return info;
     }
 
@@ -83,13 +81,13 @@ public class Server {
     /**
      * Posts the sign-in.
      *
-     * @return response regarding if the signin was successful
+     * @return response regarding if the signinData was successful
      */
     @PostMapping(path = "/signin")
-    public ResponseEntity<Map> postSignIn(@RequestBody Signin signin) {
-        logger.debug(Consts.LOG_ENTER);
+    public ResponseEntity<Map> postSignIn(@RequestBody SigninData signinData) {
+        logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        var params = signin.getParamsAsList();
+        var params = signinData.getParamsAsList();
         boolean validationPassed = validateParameters(params);
         if (!validationPassed) {
             response = SigninFailedResponseImpl.
@@ -98,19 +96,19 @@ public class Server {
         else {
             User newUser;
             try {
-                 newUser = users.addUser(signin.email, signin.firstName, signin.lastName, signin.password);
+                 newUser = users.addUser(signinData.email, signinData.firstName, signinData.lastName, signinData.password);
                  if (newUser == null) {
                      response = SigninFailedResponseImpl.
                              createSigninFailedResponse("Users service returned null user - internal error", null);
                  }
                  else {
-                     response = SigninOkResponseImpl.createSigninOkResponse(signin.email);
+                     response = SigninOkResponseImpl.createSigninOkResponse(signinData.email);
                  }
             }
             catch (SSException ssEx) {
                 if (ssEx.getCode() == SSErrorCode.EMAIL_ALREADY_EXISTS) {
                      response = SigninFailedResponseImpl.
-                             createSigninFailedResponse("Email already exists", signin.email);
+                             createSigninFailedResponse("Email already exists", signinData.email);
                 }
                 else {
                      response = SigninFailedResponseImpl.
@@ -120,7 +118,7 @@ public class Server {
         }
         HttpStatus httpStatus = response.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(response.getRestView(), httpStatus);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return responseEntity;
     }
 
@@ -132,11 +130,11 @@ public class Server {
      */
     @GetMapping(path = "/product-groups")
     public Map<String, Object> getProductGroups() {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Response response;
         ProductGroups productGroups = domain.getProductGroups();
         response = ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return response.getRestView();
     }
 
@@ -149,11 +147,11 @@ public class Server {
     @GetMapping(path = "/products/{pgId}")
     public Map<String, Object>  getProducts(
             @PathVariable("pgId") int pgId) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Response response;
         List<Product> products = domain.getProducts(pgId);
         response = ProductsOkResponseImpl.createProductsOkResponse(pgId, products);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return response.getRestView();
     }
 
@@ -166,11 +164,11 @@ public class Server {
     @GetMapping(path = "/product/{pgId}/{pId}")
     public Map<String, Object>  getProducts(
             @PathVariable("pgId") int pgId, @PathVariable("pId") int pId) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Response response;
         Product product = domain.getProduct(pgId, pId);
         response = ProductOkResponseImpl.createProductOkResponse(product);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return response.getRestView();
     }
 }

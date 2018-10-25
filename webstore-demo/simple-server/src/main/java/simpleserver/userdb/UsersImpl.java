@@ -3,7 +3,7 @@ package simpleserver.userdb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import simpleserver.userdb.dto.User;
-import simpleserver.util.Consts;
+import simpleserver.util.SSConsts;
 import org.springframework.stereotype.Service;
 import simpleserver.util.SSErrorCode;
 import simpleserver.util.SSException;
@@ -66,18 +66,18 @@ public class UsersImpl implements Users {
 
     @Override
     public boolean emailAlreadyExists(String givenEmail) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Collection<User> users = syncUserDb.values();
         List<User> filteredUsers = users.stream().filter( thisUser ->
                 (thisUser.email.equals(givenEmail))).collect(Collectors.toList());
         boolean ret = (!filteredUsers.isEmpty());
-        logger.debug("{}, ret: {}", Consts.LOG_EXIT, ret);
+        logger.debug("{}, ret: {}", SSConsts.LOG_EXIT, ret);
         return ret;
     }
 
     @Override
     public User addUser(String newEmail, String firstName, String lastName, String password) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         User user;
         if (!emailAlreadyExists(newEmail)) {
             long id = counter();
@@ -88,20 +88,20 @@ public class UsersImpl implements Users {
         else {
             throw new SSException("Email already exists: " + newEmail, SSErrorCode.EMAIL_ALREADY_EXISTS);
         }
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
         return user;
     }
 
     @Override
     public boolean checkCredentials(String userEmail, String userPassword) {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         String userHashedPassword = DigestUtils.md5Hex(userPassword).toUpperCase();
         Collection<User> users = syncUserDb.values();
         List<User> filteredUsers = users.stream().filter( thisUser ->
                 ((thisUser.email.equals(userEmail)) &&
                         (thisUser.hashedPassword.equals(userHashedPassword)))).collect(Collectors.toList());
         boolean ret = (!filteredUsers.isEmpty());
-        logger.debug("{}, ret: {}", Consts.LOG_EXIT, ret);
+        logger.debug("{}, ret: {}", SSConsts.LOG_EXIT, ret);
         return ret;
     }
 }

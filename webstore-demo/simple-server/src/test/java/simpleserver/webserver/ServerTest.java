@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import simpleserver.util.Consts;
+import simpleserver.util.SSConsts;
 
 import java.util.HashMap;
 
@@ -37,14 +37,14 @@ class ServerTest {
 
     @BeforeEach
     void setup() {
-        logger.debug(Consts.LOG_ENTER);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
     @Test
     void getInfoTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         HashMap<String, String> expectedResult = new HashMap<>();
         expectedResult.put("info", "index.html => Info in HTML format");
         String expectedResultJson = new JSONObject(expectedResult).toString();
@@ -64,7 +64,7 @@ class ServerTest {
 
     @Test
     void postSigninTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         String requestBody = "{ " +
                 "\"email\": \"jamppa.jamppanen@foo.com\"," +
                 " \"first-name\": \"Jamppa\"," +
@@ -96,7 +96,7 @@ class ServerTest {
 
     @Test
     void getProductGroupsTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         HashMap<String, String> productGroups = new HashMap<>();
         productGroups.put("1", "Books");
         productGroups.put("2", "Movies");
@@ -120,7 +120,7 @@ class ServerTest {
 
     @Test
     void getProductsTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .get("/products/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -138,7 +138,7 @@ class ServerTest {
 
     @Test
     void getProductTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .get("/product/2/49")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

@@ -16,7 +16,7 @@ import java.util.Map;
 import simpleserver.domaindb.dto.Info;
 import simpleserver.domaindb.dto.Product;
 import simpleserver.domaindb.dto.ProductGroups;
-import simpleserver.util.Consts;
+import simpleserver.util.SSConsts;
 
 
 @DisplayName("Domain test")
@@ -33,31 +33,31 @@ class DomainTest {
     @DisplayName("Tests getting the info")
     @Test
     void getInfoTest() {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Info info = domain.getInfo();
         String infoStr = info.getInfo();
         assertEquals(infoStr, "index.html => Info in HTML format");
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
     @DisplayName("Tests getting the product groups")
     @Test
     void getProductGroupsTest() {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         ProductGroups productGroups = domain.getProductGroups();
         Map<String, String> pg = productGroups.getProductGroups();
         assertEquals(2, pg.size());
         assertEquals("Books", pg.get("1"));
         assertEquals("Movies", pg.get("2"));
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
     @DisplayName("Tests getting the products")
     @Test
     void getProductsTest() {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         List<Product> books = domain.getProducts(1);
         assertNotNull(books);
         List<Product> movies = domain.getProducts(2);
@@ -67,21 +67,21 @@ class DomainTest {
         Product movie = movies.get(48);
         assertNotNull(movie);
         assertEquals("Once Upon a Time in the West", movie.title);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
     @DisplayName("Tests getting the product")
     @Test
     void getProductTest() {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         Product product = domain.getProduct(2, 49);
         assertNotNull(product);
         assertEquals(49, product.pId);
         assertEquals(2, product.pgId);
         // What a coincidence! The chosen movie is the best western of all times!
         assertEquals("Once Upon a Time in the West", product.title);
-        logger.debug(Consts.LOG_EXIT);
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 }

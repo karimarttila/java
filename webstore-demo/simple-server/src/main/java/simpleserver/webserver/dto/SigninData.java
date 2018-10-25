@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class Signin {
+public class SigninData {
 
     @JsonProperty("first-name")
     public String firstName;

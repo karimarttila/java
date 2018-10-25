@@ -1,6 +1,6 @@
 package simpleserver.util;
 
-public interface SSConfiguration {
+public interface SSProperties {
 
     /**
      * Gets json web token expiration seconds.

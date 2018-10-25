@@ -8,14 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import simpleserver.util.Consts;
-import simpleserver.util.SSConfigurationImpl;
+import simpleserver.util.SSConsts;
+import simpleserver.util.SSPropertiesImpl;
 
 @DisplayName("Session test")
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {SessionImpl.class, SSConfigurationImpl.class})
+@ContextConfiguration(classes = {SessionImpl.class, SSPropertiesImpl.class})
 public class SessionTest {
 
     @SuppressWarnings("unused")
@@ -25,15 +27,22 @@ public class SessionTest {
     Session session;
 
 
-    @DisplayName("Tests creating the JSON web token")
+    @DisplayName("Tests the JSON web token")
     @Test
-    void createJsonWebTokenTest() {
-        logger.debug(Consts.LOG_ENTER);
-        String jwt = session.createJsonWebToken("kari.karttinen@foo.com");
+    void jsonWebTokenTest() {
+        logger.debug(SSConsts.LOG_ENTER);
+        // First try to create it.
+        String testEmail = "kari.karttinen@foo.com";
+        String jwt = session.createJsonWebToken(testEmail);
         logger.debug("Returned jwt: {}", jwt);
         assertTrue(jwt.length() > 10);
-        logger.debug(Consts.LOG_EXIT);
+        // Now try to parse it.
+        String email = session.validateJsonWebToken(jwt);
+        assertEquals(testEmail, email);
+        logger.debug(SSConsts.LOG_EXIT);
     }
+
+
 
 
 }
