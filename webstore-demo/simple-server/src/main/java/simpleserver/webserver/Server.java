@@ -15,6 +15,7 @@ import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.userdb.Users;
 import simpleserver.userdb.dto.User;
 import simpleserver.util.*;
+import simpleserver.webserver.dto.LoginData;
 import simpleserver.webserver.dto.SigninData;
 import simpleserver.webserver.response.*;
 
@@ -27,6 +28,7 @@ public class Server {
 
     private final Domain domain;
     private final Users users;
+    private final Session session;
 
     /**
      * Instantiates a new Server.
@@ -34,13 +36,15 @@ public class Server {
      *
      * @param domain the domain
      * @param users the users
+     * @param session the session
      * @param props the configuration
      *
      */
     @Autowired
-    public Server(Domain domain, Users users, SSProperties props) {
+    public Server(Domain domain, Users users, Session session, SSProperties props) {
         this.domain = domain;
         this.users = users;
+        this.session = session;
         logger.debug("******************************************************");
         logger.info("Using application properties file in: {}", props.getApplicationPropertiesFilePath());
     }
@@ -114,6 +118,39 @@ public class Server {
                      response = SigninFailedResponseImpl.
                              createSigninFailedResponse("Some other SSException: " + ssEx.getMessage(), null);
                 }
+            }
+        }
+        HttpStatus httpStatus = response.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        ResponseEntity<Map> responseEntity = new ResponseEntity<>(response.getRestView(), httpStatus);
+        logger.debug(SSConsts.LOG_EXIT);
+        return responseEntity;
+    }
+
+
+    /**
+     * Posts the sign-in.
+     *
+     * @return response regarding if the signinData was successful
+     */
+    @PostMapping(path = "/login")
+    public ResponseEntity<Map> postLogin(@RequestBody LoginData loginData) {
+        logger.debug(SSConsts.LOG_ENTER);
+        Response response;
+        var params = loginData.getParamsAsList();
+        boolean validationPassed = validateParameters(params);
+        if (!validationPassed) {
+            response = LoginFailedResponseImpl.
+                    createLoginFailedResponse("Validation failed - some fields were empty", null);
+        }
+        else {
+            boolean credentialsOk = users.checkCredentials(loginData.email, loginData.password);
+            if (!credentialsOk) {
+            response = LoginFailedResponseImpl.
+                    createLoginFailedResponse("Credentials are not good - either email or password is not correct", loginData.email);
+            }
+            else {
+                String jwt = session.createJsonWebToken(loginData.email);
+                response = LoginOkResponseImpl.createLoginOkResponse(jwt);
             }
         }
         HttpStatus httpStatus = response.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
