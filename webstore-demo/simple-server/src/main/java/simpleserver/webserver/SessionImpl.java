@@ -28,7 +28,7 @@ public class SessionImpl implements Session {
      * and class member variables need to be synchoronized
      * to be thread safe.
      */
-    private final Set<String> mySessions = Collections.synchronizedSet(new HashSet<String>());
+    private final Set<String> mySessions = Collections.synchronizedSet(new HashSet<>());
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 

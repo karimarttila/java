@@ -1,7 +1,4 @@
 package simpleserver.webserver.response;
-
-import simpleserver.domaindb.dto.ProductGroups;
-
 import java.util.HashMap;
 import java.util.Map;
 

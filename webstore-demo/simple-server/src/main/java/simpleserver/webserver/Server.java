@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import simpleserver.domaindb.Domain;
 import simpleserver.domaindb.dto.Info;
@@ -31,6 +32,8 @@ public class Server {
     private final Domain domain;
     private final Users users;
     private final Session session;
+    public static final String HTTPHEADER_STR = "HttpHeaders: {}";
+    public static final String GIVEN_TOKEN_IS_NOT_VALID = "Given token is not valid";
 
     /**
      * Instantiates a new Server.
@@ -72,18 +75,21 @@ public class Server {
 
     /**
      * Parses the token from authorization header.
+     * Suppressing SonarLint S2589 since
+     * headers.get can return null (possible false positive?).
      * @param headers RequestHeaders
      * @return the email in token if parse ok, null otherwise
      */
+    @SuppressWarnings("squid:S2589")
+    @Nullable
     private String isValidToken(HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         String ret = null;
         List<String> authList = headers.get("authorization");
         String auth = null;
-        if (authList != null) {
-            if (authList.size() == 1) {
+
+        if ((authList != null) && (authList.size() == 1)) {
                 auth = authList.get(0);
-            }
         }
         if ((auth == null) || (auth.isEmpty())) {
             logger.error("The authorization header was null or empty");
@@ -212,10 +218,10 @@ public class Server {
     public ResponseEntity<Map> getProductGroups(@RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        logger.trace("HttpHeaders: {}", headers);
+        logger.trace(HTTPHEADER_STR, headers);
         String email = isValidToken(headers);
         if (email == null) {
-            response = ProductGroupsFailedResponseImpl.createProductGroupsFailedResponse("Given token is not valid");
+            response = ProductGroupsFailedResponseImpl.createProductGroupsFailedResponse(GIVEN_TOKEN_IS_NOT_VALID);
         }
         else {
             ProductGroups productGroups = domain.getProductGroups();
@@ -238,10 +244,10 @@ public class Server {
             @PathVariable("pgId") int pgId, @RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        logger.trace("HttpHeaders: {}", headers);
+        logger.trace(HTTPHEADER_STR, headers);
         String email = isValidToken(headers);
         if (email == null) {
-            response = ProductsFailedResponseImpl.createProductsFailedResponse("Given token is not valid");
+            response = ProductsFailedResponseImpl.createProductsFailedResponse(GIVEN_TOKEN_IS_NOT_VALID);
         }
         else {
             List<Product> products = domain.getProducts(pgId);
@@ -263,10 +269,10 @@ public class Server {
             @RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        logger.trace("HttpHeaders: {}", headers);
+        logger.trace(HTTPHEADER_STR, headers);
         String email = isValidToken(headers);
         if (email == null) {
-            response = ProductFailedResponseImpl.createProductFailedResponse("Given token is not valid");
+            response = ProductFailedResponseImpl.createProductFailedResponse(GIVEN_TOKEN_IS_NOT_VALID);
         }
         else {
             Product product = domain.getProduct(pgId, pId);

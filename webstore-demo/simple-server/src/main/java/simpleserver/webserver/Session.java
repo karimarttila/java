@@ -1,6 +1,7 @@
 package simpleserver.webserver;
 
-import java.util.Map;
+
+import org.springframework.lang.Nullable;
 
 public interface Session {
 
@@ -23,5 +24,6 @@ public interface Session {
      * @param jwt Json Web Token to validate
      * @return the email in the Json Web Token if parsed ok, null otherwise.
      */
+    @Nullable
     String validateJsonWebToken(String jwt);
 }

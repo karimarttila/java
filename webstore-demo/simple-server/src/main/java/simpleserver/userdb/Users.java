@@ -1,5 +1,6 @@
 package simpleserver.userdb;
 
+import org.springframework.lang.Nullable;
 import simpleserver.userdb.dto.User;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public interface Users {
      * @return new User if ok, null if not ok (+ possible SSException)
      * @throws simpleserver.util.SSException if failure
      */
+    @Nullable
     User addUser(String newEmail, String firstName, String lastName, String password);
 
     /**
