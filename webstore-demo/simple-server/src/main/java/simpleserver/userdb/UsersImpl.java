@@ -69,7 +69,7 @@ public class UsersImpl implements Users {
     public boolean emailAlreadyExists(String givenEmail) {
         logger.debug(SSConsts.LOG_ENTER);
         Collection<User> users = syncUserDb.values();
-        List<User> filteredUsers = users.stream().filter( thisUser ->
+        List<User> filteredUsers = users.stream().filter(thisUser ->
                 (thisUser.email.equals(givenEmail))).collect(Collectors.toList());
         boolean ret = (!filteredUsers.isEmpty());
         logger.debug("{}, ret: {}", SSConsts.LOG_EXIT, ret);
@@ -98,7 +98,7 @@ public class UsersImpl implements Users {
         logger.debug(SSConsts.LOG_ENTER);
         String userHashedPassword = DigestUtils.md5Hex(userPassword).toUpperCase();
         Collection<User> users = syncUserDb.values();
-        List<User> filteredUsers = users.stream().filter( thisUser ->
+        List<User> filteredUsers = users.stream().filter(thisUser ->
                 ((thisUser.email.equals(userEmail)) &&
                         (thisUser.hashedPassword.equals(userHashedPassword)))).collect(Collectors.toList());
         boolean ret = (!filteredUsers.isEmpty());

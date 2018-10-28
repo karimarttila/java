@@ -36,8 +36,9 @@ public interface Domain {
 
     /**
      * Gets the product.
+     *
      * @param pgId product group id
-     * @param pId product id
+     * @param pId  product id
      * @return the product
      */
     Product getProduct(int pgId, int pId);

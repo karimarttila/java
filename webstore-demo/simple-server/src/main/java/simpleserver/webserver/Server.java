@@ -43,11 +43,10 @@ public class Server {
      * Instantiates a new Server.
      * Autowires the Domain and Users services.
      *
-     * @param domain the domain
-     * @param users the users
+     * @param domain  the domain
+     * @param users   the users
      * @param session the session
-     * @param props the configuration
-     *
+     * @param props   the configuration
      */
     @Autowired
     public Server(Domain domain, Users users, Session session, SSProperties props) {
@@ -81,6 +80,7 @@ public class Server {
      * Parses the token from authorization header.
      * Suppressing SonarLint S2589 since
      * headers.get can return null (possible false positive?).
+     *
      * @param headers RequestHeaders
      * @return the email in token if parse ok, null otherwise
      */
@@ -93,7 +93,7 @@ public class Server {
         String auth = null;
 
         if ((authList != null) && (authList.size() == 1)) {
-                auth = authList.get(0);
+            auth = authList.get(0);
         }
         if ((auth == null) || (auth.isEmpty())) {
             logger.error("The authorization header was null or empty");
@@ -101,7 +101,8 @@ public class Server {
         else {
             int index = auth.lastIndexOf("Basic ");
             if (index != 0) {
-                logger.error("Didn't find Basic in authorization string");                      }
+                logger.error("Didn't find Basic in authorization string");
+            }
             else {
                 String basic = "Basic ";
                 String tokenCandidate = auth.substring(basic.length());
@@ -112,7 +113,7 @@ public class Server {
                     token = decoded;
                 }
                 else {
-                    token = decoded.substring(0,notIndex);
+                    token = decoded.substring(0, notIndex);
                 }
                 ret = session.validateJsonWebToken(token);
             }
@@ -153,23 +154,22 @@ public class Server {
         else {
             User newUser;
             try {
-                 newUser = users.addUser(signinData.email, signinData.firstName, signinData.lastName, signinData.password);
-                 if (newUser == null) {
-                     response = SigninFailedResponseImpl.
-                             createSigninFailedResponse("Users service returned null user - internal error", null);
-                 }
-                 else {
-                     response = SigninOkResponseImpl.createSigninOkResponse(signinData.email);
-                 }
-            }
-            catch (SSException ssEx) {
-                if (ssEx.getCode() == SSErrorCode.EMAIL_ALREADY_EXISTS) {
-                     response = SigninFailedResponseImpl.
-                             createSigninFailedResponse("Email already exists", signinData.email);
+                newUser = users.addUser(signinData.email, signinData.firstName, signinData.lastName, signinData.password);
+                if (newUser == null) {
+                    response = SigninFailedResponseImpl.
+                            createSigninFailedResponse("Users service returned null user - internal error", null);
                 }
                 else {
-                     response = SigninFailedResponseImpl.
-                             createSigninFailedResponse("Some other SSException: " + ssEx.getMessage(), null);
+                    response = SigninOkResponseImpl.createSigninOkResponse(signinData.email);
+                }
+            } catch (SSException ssEx) {
+                if (ssEx.getCode() == SSErrorCode.EMAIL_ALREADY_EXISTS) {
+                    response = SigninFailedResponseImpl.
+                            createSigninFailedResponse("Email already exists", signinData.email);
+                }
+                else {
+                    response = SigninFailedResponseImpl.
+                            createSigninFailedResponse("Some other SSException: " + ssEx.getMessage(), null);
                 }
             }
         }
@@ -198,8 +198,8 @@ public class Server {
         else {
             boolean credentialsOk = users.checkCredentials(loginData.email, loginData.password);
             if (!credentialsOk) {
-            response = LoginFailedResponseImpl.
-                    createLoginFailedResponse("Credentials are not good - either email or password is not correct", loginData.email);
+                response = LoginFailedResponseImpl.
+                        createLoginFailedResponse("Credentials are not good - either email or password is not correct", loginData.email);
             }
             else {
                 String jwt = session.createJsonWebToken(loginData.email);
@@ -244,7 +244,7 @@ public class Server {
      * @return the products
      */
     @GetMapping(path = "/products/{pgId}")
-    public Map<String, Object>  getProducts(
+    public Map<String, Object> getProducts(
             @PathVariable("pgId") int pgId, @RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
@@ -268,7 +268,7 @@ public class Server {
      * @return the product
      */
     @GetMapping(path = "/product/{pgId}/{pId}")
-    public Map<String, Object>  getProducts(
+    public Map<String, Object> getProducts(
             @PathVariable("pgId") int pgId, @PathVariable("pId") int pId,
             @RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);

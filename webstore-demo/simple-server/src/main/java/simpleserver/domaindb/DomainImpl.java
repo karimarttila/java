@@ -130,7 +130,7 @@ public class DomainImpl implements Domain {
     @Override
     public Product getProduct(int pgId, int pId) {
         logger.debug("{}, pgId: {}, pId: {}", SSConsts.LOG_ENTER, pgId, pId);
-        var products =  syncProductsCache.get(Integer.toString(pgId));
+        var products = syncProductsCache.get(Integer.toString(pgId));
         if (products == null) {
             products = getProducts(pgId);
         }

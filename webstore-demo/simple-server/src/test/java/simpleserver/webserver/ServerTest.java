@@ -163,7 +163,6 @@ class ServerTest {
     }
 
 
-
     @Test
     void getProductGroupsTest() throws Exception {
         logger.debug(SSConsts.LOG_ENTER);

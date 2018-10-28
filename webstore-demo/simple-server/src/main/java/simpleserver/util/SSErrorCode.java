@@ -1,7 +1,7 @@
 package simpleserver.util;
 
 @SuppressWarnings("unused")
-public enum  SSErrorCode {
+public enum SSErrorCode {
 
     // Simple Server application errors 100-
     EMAIL_ALREADY_EXISTS(100),

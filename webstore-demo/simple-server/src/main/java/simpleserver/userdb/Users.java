@@ -29,10 +29,10 @@ public interface Users {
     /**
      * Adds new user to the database.
      *
-     * @param newEmail Email
+     * @param newEmail  Email
      * @param firstName First name
-     * @param lastName Last name
-     * @param password Password
+     * @param lastName  Last name
+     * @param password  Password
      * @return new User if ok, null if not ok (+ possible SSException)
      * @throws simpleserver.util.SSException if failure
      */
@@ -42,7 +42,7 @@ public interface Users {
     /**
      * Checks if can find credentials (email + password).
      *
-     * @param userEmail User's email
+     * @param userEmail    User's email
      * @param userPassword User's password
      * @return true if found credentials in user db, false otherwise
      */

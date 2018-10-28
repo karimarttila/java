@@ -7,6 +7,7 @@ package simpleserver.domaindb.dto;
 public class Info {
 
     private static final String INFO_MSG = "index.html => Info in HTML format";
+
     /**
      * Gets info as json. Used in testing.
      * Not needed in production since Spring controller creates the mapping

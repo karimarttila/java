@@ -68,12 +68,10 @@ public class SessionImpl implements Session {
         else {
             try {
                 ret = Jwts.parser().setSigningKey(key).parseClaimsJws(jwt).getBody().getSubject();
-            }
-            catch (ExpiredJwtException expiredEx) {
+            } catch (ExpiredJwtException expiredEx) {
                 logger.warn("Token is expired, removing it from my sessions and returning nil: {}", expiredEx.getMessage());
                 mySessions.remove(jwt);
-            }
-            catch (JwtException otherEx) {
+            } catch (JwtException otherEx) {
                 logger.error("Some error in session handling: {}", otherEx.getMessage());
             }
         }

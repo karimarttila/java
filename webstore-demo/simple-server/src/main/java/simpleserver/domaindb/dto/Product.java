@@ -22,13 +22,13 @@ public class Product {
     /**
      * Instantiates a new Product.
      *
-     * @param pgId               the product group id
-     * @param pId                the product id
-     * @param title              the title
-     * @param price              the price
+     * @param pgId             the product group id
+     * @param pId              the product id
+     * @param title            the title
+     * @param price            the price
      * @param authorOrDirector the author or director
-     * @param year               the year
-     * @param country            the country
+     * @param year             the year
+     * @param country          the country
      * @param genreOrLanguage  the genre or language
      */
     public Product(int pgId, int pId, String title, double price,
