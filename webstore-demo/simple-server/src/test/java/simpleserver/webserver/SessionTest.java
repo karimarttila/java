@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import simpleserver.util.SSConsts;
+import simpleserver.util.SSPropertiesImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import simpleserver.util.SSConsts;
-import simpleserver.util.SSPropertiesImpl;
 
 @DisplayName("Session test")
 @ExtendWith(SpringExtension.class)

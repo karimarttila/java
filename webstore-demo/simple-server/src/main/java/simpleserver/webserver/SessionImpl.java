@@ -1,21 +1,19 @@
 package simpleserver.webserver;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import simpleserver.util.SSConsts;
-
-import java.util.*;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.JwtException;
 import simpleserver.util.SSProperties;
 
 import java.security.Key;
+import java.util.*;
 
 @Service
 public class SessionImpl implements Session {

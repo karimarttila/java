@@ -17,14 +17,13 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import simpleserver.util.SSConsts;
-import org.json.JSONObject;
 
 import java.util.Base64;
 import java.util.HashMap;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 
 // NOTE: Spring Rest Controller test reads application.properties file
 // from /main/webapp directory!

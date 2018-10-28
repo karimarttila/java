@@ -11,8 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import simpleserver.domaindb.dto.Info;
-import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.domaindb.dto.Product;
+import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.util.SSConsts;
 
 import java.io.IOException;

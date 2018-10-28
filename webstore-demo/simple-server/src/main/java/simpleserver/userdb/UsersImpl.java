@@ -1,15 +1,16 @@
 package simpleserver.userdb;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import simpleserver.userdb.dto.User;
 import simpleserver.util.SSConsts;
-import org.springframework.stereotype.Service;
 import simpleserver.util.SSErrorCode;
 import simpleserver.util.SSException;
+
 import java.util.*;
 import java.util.stream.Collectors;
-import org.apache.commons.codec.digest.DigestUtils;
 
 
 /**

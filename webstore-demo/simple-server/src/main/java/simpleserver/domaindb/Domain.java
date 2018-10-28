@@ -1,8 +1,8 @@
 package simpleserver.domaindb;
 
 import simpleserver.domaindb.dto.Info;
-import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.domaindb.dto.Product;
+import simpleserver.domaindb.dto.ProductGroups;
 
 import java.util.List;
 

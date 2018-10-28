@@ -1,8 +1,5 @@
 package simpleserver.webserver;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +14,17 @@ import simpleserver.domaindb.dto.Product;
 import simpleserver.domaindb.dto.ProductGroups;
 import simpleserver.userdb.Users;
 import simpleserver.userdb.dto.User;
-import simpleserver.util.*;
+import simpleserver.util.SSConsts;
+import simpleserver.util.SSErrorCode;
+import simpleserver.util.SSException;
+import simpleserver.util.SSProperties;
 import simpleserver.webserver.dto.LoginData;
 import simpleserver.webserver.dto.SigninData;
 import simpleserver.webserver.response.*;
+
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The Server (Spring controller).
