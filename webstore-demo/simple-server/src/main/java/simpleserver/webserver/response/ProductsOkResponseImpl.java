@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import simpleserver.domaindb.dto.Product;
 
 
+/**
+ * The type Products ok response.
+ */
 public class ProductsOkResponseImpl implements Response {
     private final Map<String, Object> response = new HashMap<>();
 
@@ -29,6 +32,13 @@ public class ProductsOkResponseImpl implements Response {
     }
 
 
+    /**
+     * Create products ok response.
+     *
+     * @param pgId     the pg id
+     * @param products the products
+     * @return the response
+     */
     public static Response createProductsOkResponse(int pgId, List<Product> products) {
         return new ProductsOkResponseImpl(pgId, products);
     }

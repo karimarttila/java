@@ -1,10 +1,12 @@
 package simpleserver.webserver;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +69,47 @@ public class Server {
         return ret;
     }
 
+
+    /**
+     * Parses the token from authorization header.
+     * @param headers RequestHeaders
+     * @return the email in token if parse ok, null otherwise
+     */
+    private String isValidToken(HttpHeaders headers) {
+        logger.debug(SSConsts.LOG_ENTER);
+        String ret = null;
+        List<String> authList = headers.get("authorization");
+        String auth = null;
+        if (authList != null) {
+            if (authList.size() == 1) {
+                auth = authList.get(0);
+            }
+        }
+        if ((auth == null) || (auth.isEmpty())) {
+            logger.error("The authorization header was null or empty");
+        }
+        else {
+            int index = auth.lastIndexOf("Basic ");
+            if (index != 0) {
+                logger.error("Didn't find Basic in authorization string");                      }
+            else {
+                String basic = "Basic ";
+                String tokenCandidate = auth.substring(basic.length());
+                String decoded = new String(Base64.getDecoder().decode(tokenCandidate));
+                int notIndex = decoded.indexOf(":NOT");
+                String token;
+                if (notIndex == -1) {
+                    token = decoded;
+                }
+                else {
+                    token = decoded.substring(0,notIndex);
+                }
+                ret = session.validateJsonWebToken(token);
+            }
+        }
+        logger.debug(SSConsts.LOG_EXIT);
+        return ret;
+    }
 
     /**
      * Gets info.
@@ -166,13 +209,22 @@ public class Server {
      * @return the product groups
      */
     @GetMapping(path = "/product-groups")
-    public Map<String, Object> getProductGroups() {
+    public ResponseEntity<Map> getProductGroups(@RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        ProductGroups productGroups = domain.getProductGroups();
-        response = ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
+        logger.trace("HttpHeaders: {}", headers);
+        String email = isValidToken(headers);
+        if (email == null) {
+            response = ProductGroupsFailedResponseImpl.createProductGroupsFailedResponse("Given token is not valid");
+        }
+        else {
+            ProductGroups productGroups = domain.getProductGroups();
+            response = ProductGroupsOkResponseImpl.createProductGroupsOkResponse(productGroups);
+        }
+        HttpStatus httpStatus = response.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        ResponseEntity<Map> responseEntity = new ResponseEntity<>(response.getRestView(), httpStatus);
         logger.debug(SSConsts.LOG_EXIT);
-        return response.getRestView();
+        return responseEntity;
     }
 
 
@@ -183,11 +235,18 @@ public class Server {
      */
     @GetMapping(path = "/products/{pgId}")
     public Map<String, Object>  getProducts(
-            @PathVariable("pgId") int pgId) {
+            @PathVariable("pgId") int pgId, @RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        List<Product> products = domain.getProducts(pgId);
-        response = ProductsOkResponseImpl.createProductsOkResponse(pgId, products);
+        logger.trace("HttpHeaders: {}", headers);
+        String email = isValidToken(headers);
+        if (email == null) {
+            response = ProductsFailedResponseImpl.createProductsFailedResponse("Given token is not valid");
+        }
+        else {
+            List<Product> products = domain.getProducts(pgId);
+            response = ProductsOkResponseImpl.createProductsOkResponse(pgId, products);
+        }
         logger.debug(SSConsts.LOG_EXIT);
         return response.getRestView();
     }
@@ -200,11 +259,19 @@ public class Server {
      */
     @GetMapping(path = "/product/{pgId}/{pId}")
     public Map<String, Object>  getProducts(
-            @PathVariable("pgId") int pgId, @PathVariable("pId") int pId) {
+            @PathVariable("pgId") int pgId, @PathVariable("pId") int pId,
+            @RequestHeader HttpHeaders headers) {
         logger.debug(SSConsts.LOG_ENTER);
         Response response;
-        Product product = domain.getProduct(pgId, pId);
-        response = ProductOkResponseImpl.createProductOkResponse(product);
+        logger.trace("HttpHeaders: {}", headers);
+        String email = isValidToken(headers);
+        if (email == null) {
+            response = ProductFailedResponseImpl.createProductFailedResponse("Given token is not valid");
+        }
+        else {
+            Product product = domain.getProduct(pgId, pId);
+            response = ProductOkResponseImpl.createProductOkResponse(product);
+        }
         logger.debug(SSConsts.LOG_EXIT);
         return response.getRestView();
     }

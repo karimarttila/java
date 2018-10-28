@@ -3,6 +3,9 @@ package simpleserver.webserver.response;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Login ok response.
+ */
 public class LoginOkResponseImpl implements Response {
 
     private final Map<String, Object> response = new HashMap<>();
@@ -15,6 +18,12 @@ public class LoginOkResponseImpl implements Response {
     }
 
 
+    /**
+     * Create login ok response.
+     *
+     * @param jwt the jwt
+     * @return the response
+     */
     public static Response createLoginOkResponse(String jwt) {
         return new LoginOkResponseImpl(jwt);
     }

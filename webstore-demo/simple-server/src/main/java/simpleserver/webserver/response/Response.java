@@ -3,7 +3,7 @@ package simpleserver.webserver.response;
 import java.util.Map;
 
 /**
- * The interface Product groups response.
+ * The interface Simple Server response.
  */
 public interface Response {
 

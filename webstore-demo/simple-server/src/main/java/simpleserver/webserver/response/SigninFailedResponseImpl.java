@@ -3,6 +3,9 @@ package simpleserver.webserver.response;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Signin failed response.
+ */
 public class SigninFailedResponseImpl implements Response {
 
     private final Map<String, Object> response = new HashMap<>();
@@ -17,6 +20,13 @@ public class SigninFailedResponseImpl implements Response {
     }
 
 
+    /**
+     * Create signin failed response.
+     *
+     * @param errMsg the error msg
+     * @param email  the email
+     * @return the response
+     */
     public static Response createSigninFailedResponse(String errMsg, String email) {
         return new SigninFailedResponseImpl(errMsg, email);
     }

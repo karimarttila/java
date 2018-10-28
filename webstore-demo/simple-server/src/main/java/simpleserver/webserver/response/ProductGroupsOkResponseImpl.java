@@ -5,6 +5,9 @@ import simpleserver.domaindb.dto.ProductGroups;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Product groups ok response.
+ */
 public class ProductGroupsOkResponseImpl implements Response {
     private final Map<String, Object> response = new HashMap<>();
 
@@ -16,6 +19,12 @@ public class ProductGroupsOkResponseImpl implements Response {
     }
 
 
+    /**
+     * Create product groups ok response.
+     *
+     * @param productGroups the product groups
+     * @return the response
+     */
     public static Response createProductGroupsOkResponse(ProductGroups productGroups) {
         return new ProductGroupsOkResponseImpl(productGroups);
     }

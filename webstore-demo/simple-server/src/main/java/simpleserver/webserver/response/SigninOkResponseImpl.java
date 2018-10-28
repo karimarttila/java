@@ -3,6 +3,9 @@ package simpleserver.webserver.response;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Signin ok response.
+ */
 public class SigninOkResponseImpl implements Response {
 
     private final Map<String, Object> response = new HashMap<>();
@@ -14,6 +17,12 @@ public class SigninOkResponseImpl implements Response {
     }
 
 
+    /**
+     * Create signin ok response.
+     *
+     * @param email the email
+     * @return the response
+     */
     public static Response createSigninOkResponse(String email) {
         return new SigninOkResponseImpl(email);
     }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -16,8 +17,11 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import simpleserver.util.SSConsts;
+import org.json.JSONObject;
 
+import java.util.Base64;
 import java.util.HashMap;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -91,7 +95,74 @@ class ServerTest {
                 .andExpect(jsonPath("$.msg").value("Email already exists"))
                 .andReturn();
         logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
+        logger.debug(SSConsts.LOG_EXIT);
     }
+
+
+    @Test
+    void postLoginTest() throws Exception {
+        logger.debug(SSConsts.LOG_ENTER);
+        String requestBodyOk = "{ " +
+                "\"email\": \"kari.karttinen@foo.com\"," +
+                " \"password\": \"Kari\"" +
+                " }";
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(requestBodyOk)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.ret").value("ok"))
+                .andExpect(jsonPath("$.msg").value("Credentials ok"))
+                .andReturn();
+    }
+
+
+    @Test
+    void postFailedLoginTest() throws Exception {
+        logger.debug(SSConsts.LOG_ENTER);
+        String requestBodyNotOk = "{ " +
+                "\"email\": \"kari.karttinen@foo.com\"," +
+                " \"password\": \"WRONG-PASSWORD\"" +
+                " }";
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(requestBodyNotOk)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().is(400))
+                .andExpect(jsonPath("$.ret").value("failed"))
+                .andExpect(jsonPath("$.msg").value("Credentials are not good - either email or password is not correct"))
+                .andReturn();
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
+        logger.debug(SSConsts.LOG_EXIT);
+    }
+
+
+    String getEncodedJwt() throws Exception {
+        logger.debug(SSConsts.LOG_ENTER);
+        String requestBodyOk = "{ " +
+                "\"email\": \"kari.karttinen@foo.com\"," +
+                " \"password\": \"Kari\"" +
+                " }";
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(requestBodyOk)
+                .accept(MediaType.APPLICATION_JSON_UTF8);
+        MvcResult mvcResult = this.mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.ret").value("ok"))
+                .andExpect(jsonPath("$.msg").value("Credentials ok"))
+                .andReturn();
+        MockHttpServletResponse mhsRes = mvcResult.getResponse();
+        String res = mhsRes.getContentAsString();
+        JSONObject jsonObject = new JSONObject(res);
+        String jwt = jsonObject.getString("json-web-token");
+        String encodedJwt = Base64.getEncoder().encodeToString(jwt.getBytes());
+        logger.debug(SSConsts.LOG_EXIT);
+        return encodedJwt;
+    }
+
 
 
     @Test
@@ -104,16 +175,17 @@ class ServerTest {
         expectedResult.put("ret", "ok");
         expectedResult.put("product-groups", productGroups);
         String expectedResultJson = new JSONObject(expectedResult).toString();
+        String encodedJwt = getEncodedJwt();
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .get("/product-groups")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .header("Authorization", "Basic " + encodedJwt)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
                 .andReturn();
-
         logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
     }
 
@@ -121,9 +193,12 @@ class ServerTest {
     @Test
     void getProductsTest() throws Exception {
         logger.debug(SSConsts.LOG_ENTER);
+        String encodedJwt = getEncodedJwt();
+
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .get("/products/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .header("Authorization", "Basic " + encodedJwt)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -139,9 +214,12 @@ class ServerTest {
     @Test
     void getProductTest() throws Exception {
         logger.debug(SSConsts.LOG_ENTER);
+        String encodedJwt = getEncodedJwt();
+
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .get("/product/2/49")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .header("Authorization", "Basic " + encodedJwt)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())

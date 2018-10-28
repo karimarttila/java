@@ -3,6 +3,9 @@ package simpleserver.webserver.response;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Login failed response.
+ */
 public class LoginFailedResponseImpl implements Response {
 
     private final Map<String, Object> response = new HashMap<>();
@@ -17,6 +20,13 @@ public class LoginFailedResponseImpl implements Response {
     }
 
 
+    /**
+     * Create login failed response.
+     *
+     * @param errMsg the error msg
+     * @param email  the email
+     * @return the response
+     */
     public static Response createLoginFailedResponse(String errMsg, String email) {
         return new LoginFailedResponseImpl(errMsg, email);
     }
