@@ -29,6 +29,7 @@ import java.util.Map;
 /**
  * The Server (Spring controller).
  */
+@CrossOrigin
 @RestController
 public class Server {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
