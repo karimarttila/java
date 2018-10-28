@@ -2,17 +2,35 @@
 
 
 # Table of Contents  <!-- omit in toc -->
+- [Prologue](#prologue)
 - [Introduction](#introduction)
 - [Tools and Versions](#tools-and-versions)
-- [Music](#music)
 - [Gradle](#gradle)
+- [Spring Boot 2.0 and Spring 5.0](#spring-boot-20-and-spring-50)
 - [SonarQube](#sonarqube)
+- [SonarQube](#sonarqube-1)
+- [IDE](#ide)
+- [Java Static Code Analysis](#java-static-code-analysis)
 - [Java REPL](#java-repl)
+- [Logging](#logging)
+- [Spring Profiles](#spring-profiles)
+- [JUnit5](#junit5)
+- [Code Coverage](#code-coverage)
+- [Java Verbosity](#java-verbosity)
+- [Conclusions](#conclusions)
+  - [Spring and Spring Boot](#spring-and-spring-boot)
+  - [Java as a Language](#java-as-a-language)
+- [Epilogue](#epilogue)
+
+
+# Prologue
+
+"Oh, god. Have I been using the wrong language all these years?"
 
 
 # Introduction
 
-I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous [Clojure](https://github.com/karimarttila/clojure/tree/master/clj-ring-cljs-reagent-demo/simple-server) and [Javascript](https://github.com/karimarttila/javascript/tree/master/webstore-demo/simple-server) implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
+I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous [Clojure](https://github.com/karimarttila/clojure/tree/master/clj-ring-cljs-reagent-demo/simple-server) and [Javascript](https://github.com/karimarttila/javascript/tree/master/webstore-demo/simple-server) implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason I couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
 
 
 # Tools and Versions
@@ -39,16 +57,16 @@ Gradle wrapper is also provided in this Git repo in [gradle](gradle) directory.
 
 I remember back in mid 2000 when [Java EE](https://en.wikipedia.org/wiki/Java_Platform,_Enterprise_Edition) was really bloated and [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) came with its dependency injection and autowiring and made things easier. Well, Spring itself seems to be rather bloated nowadays and therefore we have [Spring Boot](http://spring.io/projects/spring-boot) which considerably makes building Spring applications easier.
 
-Simple Server is implemented using [Spring Boot](http://spring.io/projects/spring-boot) v. 2.0.5 which uses [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) v. 5.0.9 (see [Spring Boot Documentation - Appendix F. Dependency versions](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html). If you are familiar with Spring application Simple Server also uses autowiring extensively.
+Simple Server is implemented using [Spring Boot](http://spring.io/projects/spring-boot) v. 2.0.5 which uses [Spring Framework](https://en.wikipedia.org/wiki/Spring_Framework) v. 5.0.9 (see [Spring Boot Documentation - Appendix F. Dependency versions](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html). If you are familiar with Spring applications you notice that Simple Server also uses autowiring extensively.
 
-Spring also causes quite a lot of issues. E.g. if you just forget one annotation you may spend a couple of hours to figuring out why some property is not injected properly. Spring is a black box and if everything is configured properly you are good to go. If not, then it is at times pretty frustrating to find the root cause from the black box. I never had this kind of configuration issues with Clojure or Python.
+Spring makes things easier but it also causes quite a lot of issues. E.g. if you just forget one annotation you may spend a couple of hours figuring out why some property is not injected properly. Spring is more or less a black box and if everything is configured properly you are good to go. If not, then it is at times pretty frustrating to find the root cause from the black box. I rarely had this kind of configuration issues with Clojure or Python.
 
 One example of the Spring issues was when I decided not to use the JUnit4 testing framework which comes with Spring Boot 2 but to use JUnit5. Everything went well until I introduced configuration autowiring from application.properties file - suddenly the Spring Rest Controller tests started to fail (couldn't find the application.properties file from the servlet context...). I had to google quite a while until I figured out how to setup the Spring Rest Controller tests and where to put the damn application.properties file so that Spring can find them in those tests. The lesson of the story is: If you use Spring and Spring Boot exactly as it is configured by default everything (mostly) works just fine. But if you want to do something a bit differently - you may need to google quite a bit before you figure out how to make everything wired to run the tests and the application jar.
 
 
 # SonarQube
 
-I created a [Simple SonarQube](https://github.com/karimarttila/docker/tree/master/simple-sonarqube) container for Java 10 projects. I have usually configured [Jenkins](https://jenkins.io/) (see my blog article [Jenkins on AWS](https://medium.com/tieto-developers/jenkins-on-aws-49133e011ac5) if you are interested) and SonarQube servers for my Java projects in which I have been working as a Software Architect - now I wanted to see how easy [SonarQube](https://www.sonarqube.org/) was to used in my local Ubuntu 18 workstation using as a [Docker](https://www.docker.com/) container.
+I created a [Simple SonarQube](https://github.com/karimarttila/docker/tree/master/simple-sonarqube) container for Java 10 projects. I have usually configured [Jenkins](https://jenkins.io/) (see my blog article [Jenkins on AWS](https://medium.com/tieto-developers/jenkins-on-aws-49133e011ac5) if you are interested) and SonarQube servers for my Java projects in which I have been working as a Software Architect - now I wanted to see how easy [SonarQube](https://www.sonarqube.org/) was to use in my local Ubuntu 18 workstation using as a [Docker](https://www.docker.com/) container.
 
 
 The [build.gradle](build.gradle) file shows how to configure the sonarqube plugin:
@@ -82,21 +100,21 @@ Example script [run-ss-container-sonarqube-analysis.sh](run-ss-container-sonarqu
 
 # IDE
 
-[IntelliJ IDEA](https://www.jetbrains.com/idea/) is my favorite Java IDE. I used for years [Eclipse](http://www.eclipse.org/) since it is free and very widely used with our offshore developers (and I was working as an onsite architect at that time - clear benefits to use the same IDE and provide examples for developers using the common IDE - not so important any more). I switched a few years ago to IntelliJ IDEA and have never missed bloated Eclipse ever since. I  use [PyCharm](https://www.jetbrains.com/pycharm) for Python programming and since PyCharm and IDEA are provided by the same company (JetBrains) they provide very similar look-and-feel. I also use IntelliJ IDEA with [Cursive](https://cursive-ide.com/) plugin for Clojure programming and it also provides very similar look-and-feel. For my previous Javascript excercise I used [Visual Studio Code](https://code.visualstudio.com/) (and with my personal tweakings I managed to make it give pretty same feel, though the look is different, of course).
+[IntelliJ IDEA](https://www.jetbrains.com/idea/) is my favorite Java IDE. I used for years [Eclipse](http://www.eclipse.org/) since it is free and very widely used with our offshore developers (and I was working as an onsite architect at that time - clear benefits to use the same IDE and provide examples for developers using the common IDE - using the same IDE is not so important any more). I switched a few years ago to IntelliJ IDEA and have never missed bloated Eclipse ever since. I  use [PyCharm](https://www.jetbrains.com/pycharm) for Python programming and since PyCharm and IDEA are provided by the same company (JetBrains) they provide very similar look-and-feel. I also use IntelliJ IDEA with [Cursive](https://cursive-ide.com/) plugin for Clojure programming and it also provides very similar look-and-feel. For my previous Javascript excercise I used [Visual Studio Code](https://code.visualstudio.com/) (and with my personal tweakings I managed to make it give pretty same feel, though the look is different, of course).
 
 
 # Java Static Code Analysis
 
-IntelliJ IDEA supports two good static code analysis ways:
+IntelliJ IDEA supports two good static code analysis tools:
 
 **[Analyze / Inspect code](https://www.jetbrains.com/help/idea/code-inspection.html).** This is an IntelliJ IDEA build in inspection tool. It can detect various language and runtime errors, suggest various corrections etc. It's actually a pretty good tool for clean your code and also learn new language features. You can configure the tool pretty much you like, and create your own project specific profiles. E.g. I supressed warning related weaker access for DTO classes (i.e. fields are intentionally public and Code Inspection suggested that the fields should be private - you can easily supress these warning by adding annotation```java @SuppressWarnings("WeakerAccess")``` before the class defintion in the source file).
 
-**[SonarLint](https://plugins.jetbrains.com/plugin/7973-sonarlint).** There are quite a few linters for Java code but one of the most used is SonarLint.  
+**[SonarLint](https://plugins.jetbrains.com/plugin/7973-sonarlint).** There are quite a few linters for Java code but one of the most used is SonarLint. IntelliJ IDEA provides a live SonarLint integration to the Java class you are editing at the moment. You can also run SonarLint for the whole project. 
 
 
 # Java REPL
 
-Java 9 introduced a shiny Java REPL for the Java developers)! This is nothing compared to Lisp REPLs but anyway it's nice to have a Java REPL at last. You can start a Java REPL session with command "jshell". 
+Java 9 introduced a shiny Java REPL! This is nothing compared to Lisp REPLs but anyway it's nice to have a Java REPL at last. You can start a Java REPL session with command "jshell". 
 
 Here a short Java REPL session to explore how to convert Java HashMap to JSONObject.
 
@@ -125,7 +143,7 @@ jshell> DigestUtils.md5Hex("Kari").toUpperCase();
 $2 ==> "87EE0597C41D7AB8C074D7DC4794716D"
 ```
 
-This is actually pretty nice and a wellcome addition to Java 9 - now we can test small code snippets like that without creating a bigger testing context.
+This is actually pretty nice and a wellcome addition to Java 9 - now we can test small code snippets like that without creating a bigger testing context (like in Python or Node).
 
 But you can mostly use it for small simple code snippet explorations. If you want to do anything more complex you soon find that you have to set jshell classpath this jar, and this jar, and then this jar and so on:
 
@@ -140,7 +158,7 @@ find ~/.gradle/caches -iname "jackson*.jar" | wc -l
 ... right... let's forget that exploration for now.
 ```
 
-**But IntelliJ IDEA to the rescue!** IntelliJ IDEA implements a nice version of the Java REPL. Check it in Tools / JShell Console. It is able to load all your dependencies to the JShell (also application classes), and the REPL editor is pretty nice. See following documents how to use it:
+**But IntelliJ IDEA to the rescue!** IntelliJ IDEA implements a nice Java REPL integration. Check it in Tools / JShell Console. It is able to load all your dependencies to the JShell (also application classes), and the REPL editor is pretty nice. See following documents how to use it:
 
 - [Java 9 and IntelliJ IDEA](https://blog.jetbrains.com/idea/2017/09/java-9-and-intellij-idea/) => The chapter "**JShell**".
 - [StackOverFlow - How to add application classes to IntelliJ IDEA JShell](https://stackoverflow.com/questions/48143960/how-to-import-a-custom-class-in-intellij-jshell-console). NOTE: Remember to start JShell again once you have added your output classes to IDEA libraries! 
@@ -209,7 +227,7 @@ Spring Boot comes with Logback out of the box. Spring Boot should support groovy
 Just for demonstration purposes I created two Spring profiles: dev and prod. You can start the script e.g. with dev profile like:
 
 ```bash
-java -Dspring.profiles.active=prod --illegal-access=deny -jar build/libs/simple-server-0.1.jar
+java -Dspring.profiles.active=dev --illegal-access=deny -jar build/libs/simple-server-0.1.jar
 ```
 
 Dev profile uses file [application-dev.properties](src/main/resources/application-dev.properties) and you run above command you get logs denoting that we are running dev profile ("DEV" in log before "DEBUG", see [logback-env-dev.groovy](src/main/resources/logback-env-dev.groovy) configuration):
@@ -222,7 +240,7 @@ Dev profile uses file [application-dev.properties](src/main/resources/applicatio
 
 # JUnit5
 
-Latest Spring Boot that I used writing this was version 2.0.5 which comes with JUnit 4.12. There were major changes in new JUnit5 and I wanted to try those, so I configured [build.gradle](build.gradle) to use JUnit5.
+Latest Spring Boot that I used writing this was version 2.0.5 which comes with JUnit 4.12. There were major changes in the new JUnit5 and I wanted to try those, so I configured [build.gradle](build.gradle) to use JUnit5.
 
 You can run the tests as previously:
 
@@ -251,21 +269,27 @@ Using JUnit5 it is pretty nice to test e.g. exceptions:
 The tests take considerably more time in Java and Clojure than in Javascript/Node (because OS loads JVM, and JVM loads application and test classes and only then JVM lets testing framework to start the actual testing...):
 
 ```bash
-$ time ./clean-build.sh
+$ time ./gradlew --rerun-tasks test
+Test result: SUCCESS
+Test summary: 15 tests, 15 succeeded, 0 failed, 0 skipped
 BUILD SUCCESSFUL in 5s
-7 actionable tasks: 7 executed
-
-real    0m5.674s
-user    0m1.201s
-sys	0m0.085s
+5 actionable tasks: 5 executed
+real    0m5.757s
+user    0m1.080s
+sys	0m0.131s
 ```
 
 In the Javascript side:
 
 ```bash
- 28 passing (82ms)
-real    0m0.634s
+time ./run-tests-with-trace.sh
+  28 passing (94ms)
+real	0m0.775s
+user	0m0.683s
+sys	0m0.083s
 ```
+
+Javascript: 0.8 secs  -  Java: 5.8 secs. Doesn't look good for Java.
 
 
 # Code Coverage
@@ -275,16 +299,15 @@ Code coverage is a pretty easy to use in IntelliJ idea. In this new IntelliJ ver
 
 # Java Verbosity
 
-Let's have a couple of examples of Java verbosity and complexity related to other languages I used to implement Simple Server.
+Let's have an example of Java verbosity and complexity related to other languages I used to implement the Simple Server.
 
 Here we test API /product-groups which returns a simple JSON map. See how complex the testing is to implement in Java:
 
-TODO-KARI: Copy-paste again when JSON Web Token is implemented.
 
 ```java
     @Test
     void getProductGroupsTest() throws Exception {
-        logger.debug(Consts.LOG_ENTER);
+        logger.debug(SSConsts.LOG_ENTER);
         HashMap<String, String> productGroups = new HashMap<>();
         productGroups.put("1", "Books");
         productGroups.put("2", "Movies");
@@ -292,15 +315,18 @@ TODO-KARI: Copy-paste again when JSON Web Token is implemented.
         expectedResult.put("ret", "ok");
         expectedResult.put("product-groups", productGroups);
         String expectedResultJson = new JSONObject(expectedResult).toString();
+        String encodedJwt = getEncodedJwt();
 
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/product-groups").contentType(MediaType.APPLICATION_JSON_UTF8)
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .get("/product-groups")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .header("Authorization", "Basic " + encodedJwt)
                 .accept(MediaType.APPLICATION_JSON_UTF8);
         MvcResult mvcResult = this.mockMvc.perform(builder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
                 .andReturn();
-
-        logger.trace("Content: " +  mvcResult.getResponse().getContentAsString());
+        logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
     }
 ```
 
@@ -356,7 +382,7 @@ The same in Clojure:
   });
 ```
 
-As you can see from the example in Clojure and Javascript we can treat data as data, in Java not so much.
+As you can see from the example in Clojure and Javascript we can treat data as data, in Java not so much. In Java if you want to create Java-ish code you have to implement class this and class that for your data. In Clojure you can just use Clojure native data structures in code, and in Javascript JSON data structures, which makes much more sense and makes the code more readable as well.
 
 
 # Conclusions
@@ -364,7 +390,7 @@ As you can see from the example in Clojure and Javascript we can treat data as d
 
 ## Spring and Spring Boot
 
-Spring Boot makes creating server / microservice applications using Java much easier. Spring provides a great framework which glues your components together and provides an overall framework to make things easier. It's hard to find a reason not to use Spring (i.e. to create a pure EE Java app). 
+Spring Boot makes creating server / microservice applications using Java much easier. Spring provides a great framework which glues your components together and provides an overall framework to make things easier. It's hard to find a reason not to use Spring (i.e. to create a pure EE Java app). I guess hardly no-one nowadays uses pure EE without Spring.
 
 But remember: if you want to deviate from the default Spring Boot configuration (as I did when I used JUnit5 instead of JUnit4) you are pretty soon googling why some autowiring or servlet context or something is not working as it should.
 
@@ -375,15 +401,24 @@ But remember: if you want to deviate from the default Spring Boot configuration 
 
 **Object oriented paradigm.** Object oriented paradigm was something cool in mid 1990's but nowadays seems more or less an unholy mess of classes having data, method and other classes having other data, methods and other classes... For data oriented applications I would rather use functional paradigm which makes a better separation between data and functions that operate on data. 
 
-**Getters and Setters**. For simple data classes in which the fields are the interface it is stupid to make the fields private and provide a huge list of getters and setters. In those cases I think it is better just to make the fields public. If there is a reason to hide some internal structure, then you should make that private, of course.
+**Getters and Setters**. For simple data classes in which the fields are the interface it is stupid to make the fields private and provide a huge list of getters and setters. In those cases I think it is better just to make the fields public. If there is a reason to hide some internal structure, then you should make that private, of course. The getters/setters is definitely something that was not properly designed in the Java language. 
+
+**Checked exceptions**. Another (possible) design flaw was the checked exceptions which some consider as a failed experiment in the language. If you use checked exceptions you should understand to use them only in those situations in which you want to enforce the calling code to deal with a possible exception and the calling code really can do something with it.
 
 **Safety.** If you need a staticly typed safe language and runtime environment (JVM - some 20 years of solid testing in enterprise world) with a great ecosystem for a big enterprise project with tens of developers - Java is the solution. 
 
 **IDE tooling.** IDE tooling is of course great since we are using statically typed language. [IntelliJ IDEA](https://www.jetbrains.com/idea/) (my favorite Java IDE) provides exact suggestions for methods when it recognizes which class we are dealing with.
 
-**Learning curve.** A bit difficult to say something about this since I've been programming Java some 20 years now (first Java project was actually in year 1998). But after this exercise I have a feeling that for a newbie programmer Java basic stuff cannot be learned in a couple of days and start being productive and learn the new stuff on the way as you can do e.g. with Python and Javascript. Also the frameworks take some time to learn (even a hard-core Java programmer like me forgot some peculiarities regarding Spring when I have not done serious Java/Spring programming about in 1,5 years). I think it is a lot easier for a Java guy to start using Javascript or Python than a Javascript guy start to use Java. Now after implementing the same web server using Javascript/Node and Java I can better understand why those Javascript guys despise Java so much - Java is far from Javascript/Node in developer productivity. But you don't have to leave JVM for Java's sins - you can start using Clojure and get the best of both worlds - a battle tested runtime (JVM) with a great functional and immutable language (Clojure).
+**Learning curve.** A bit difficult to say something about this since I've been programming Java some 20 years now (first Java project was actually in year 1998). But after this exercise I have a feeling that for a newbie programmer Java basic stuff cannot be learned in a couple of days and then start being productive and learn the new stuff on the way as you can do e.g. with Python and Javascript. Also the frameworks take some time to learn (even a hard-core Java programmer like me forgot some peculiarities regarding Spring when I have not done serious Java/Spring programming about in 1,5 years). I think it is a lot easier for a Java guy to start using Javascript or Python than a Javascript guy start to use Java. Now after implementing the same web server using Javascript/Node and Java I can better understand why those Javascript guys despise Java so much - Java is far from Javascript/Node in developer productivity. But you don't have to leave JVM for Java's sins - you can start using Clojure and get the best of both worlds - a battle tested runtime (JVM) with a great functional and immutable language (Clojure).
 
-**Rigidness.** I have been programming Java some 20 years - I'm pretty seasoned Java programming. But even though I was a bit amazed myself regarding the productivity between Javascript/Node vs Java - I think I hassled with the Java implementation about the same time I implemented the same server in Javascript/Node and had to learn Javascript/Node on the fly while implementing the server - wtf? Have I really used such a non-productive language and runtime all these years? The main reason for this low productivity is that Java is so verbose and rigid. You have to implement class this and class that to make even minor functionality (if you want to make implementation Java-ish). In the Javascript, Python and Clojure side you have a lot more freedom because the languages are dynamically typed and you can treat data as data and not as an unholy mix of classes with data and references to other classes.
+**Rigidness.** I have been programming Java some 20 years - I'm pretty seasoned Java programmer. But even though I was a bit amazed myself regarding the productivity between Javascript/Node vs Java. Just for curiosity I looked my Github commits regarding the Javascript/Node implementation of this server exercise, and Java commits: I did both implementations in some 3 weeks (only evenings, not every evening). So, how is it possible that you implement the same server in about the same time with a language you just learned on the fly while implementing the server compared to a language you have used 20 years? Wtf? Have I really used such a non-productive language all these years? I think one of the main reasons for this low productivity is that Java is so verbose and rigid. You have to implement class this and class that to make even minor functionality (if you want to make the implementation Java-ish). In the Javascript, Python and Clojure side you have a lot more freedom because the languages are dynamically typed and you can treat data as data and not as an unholy mix of classes with data and references to other classes.
 
-**Summa summarum.** Java is not that bad. There are a lot of cons in Java: type safety, great ecosystem, JVM is battle tested runtime, great tooling, a huge developer pool etc. All these reasons make Java a great enterprise language for big critical enterprise projects when many developers need to work on the same code base. But the price is a verbose and rigid language with a rather slow development cycle. E.g. programming in Java really requires TDD since you can more easily develop your system in small increments when you use a good unit/integration test as a development bench (and you get a test suite as a by-product) - not a bad thing per se. Something you don't need e.g. in Clojure because you have a real Lisp REPL and you can grow your system in a more organic way with the REPL (and you still can create a good test suite).
+**Summa summarum.** Ok, ok, I have been hitting Java with a stick in this chapter but afterall Java is not that bad if you use it in the right project. There are a lot of cons in Java: type safety, great ecosystem, JVM is battle tested runtime, great tooling, a huge developer pool etc. All these reasons make Java a great enterprise language for big critical enterprise projects when many developers need to work on the same code base. But the price is a verbose and rigid language with a rather slow development cycle. E.g. programming in Java really requires TDD since you can easily develop your system in small increments when you use a good unit/integration test as a development bench (and you get a test suite as a by-product) - not a bad thing per se. Something you don't need e.g. in Clojure because you have a real Lisp REPL and you can grow your system in a more organic way with the REPL (but you still can create a good test suite, and of course you should).
+
+
+# Epilogue
+
+In the beginning of this story I asked myself: "Have I been using the wrong language all these years?" Well, yes and no. No in that sense that 20 years ago Java was really something new. You had an enterprise language with garbage collection, which was really good since most of the C / C++ programmers really never learned memory management properly. In those days there were not that much of a choice since customers wanted the projects to be implemented using Java, and Java we used. Yes, in that sense that nowadays we have so much more choices. You really don't have to use Java for small microservice type applications. And I wouldn't use Java in those kind of small projects unless the customer required so. It is much better to implement small microservices using dynamic productive languages like Javascript/Node, Python or Clojure. And for data oriented projects I would use Clojure since Clojure really shines with data processing. I would use Java only in some really, really big projects with a lot of developers working on the same code base and the static language protects developers from trivial errors assuming something about the parameter and return types. 
+
+All right. My homecoming to Java land was rather short, and next I will move to Python land, and then to Go land. Let's see what kind of reflections those languages will give when comparing the experiences to the languages I already have used to implement the Simple Server. 
 
