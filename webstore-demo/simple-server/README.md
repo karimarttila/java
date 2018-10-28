@@ -384,6 +384,82 @@ The same in Clojure:
 
 As you can see from the example in Clojure and Javascript we can treat data as data, in Java not so much. In Java if you want to create Java-ish code you have to implement class this and class that for your data. In Clojure you can just use Clojure native data structures in code, and in Javascript JSON data structures, which makes much more sense and makes the code more readable as well.
 
+Let's also compare the lines of code between these three languages:
+
+**Java:**
+
+```text
+$ find src/main/ -name "*.java" | xargs wc -l
+  108 src/main/java/simpleserver/userdb/UsersImpl.java
+   50 src/main/java/simpleserver/userdb/Users.java
+   36 src/main/java/simpleserver/userdb/dto/User.java
+  156 src/main/java/simpleserver/domaindb/DomainImpl.java
+   34 src/main/java/simpleserver/domaindb/dto/ProductGroups.java
+   23 src/main/java/simpleserver/domaindb/dto/Info.java
+   47 src/main/java/simpleserver/domaindb/dto/Product.java
+   45 src/main/java/simpleserver/domaindb/Domain.java
+   21 src/main/java/simpleserver/util/SSErrorCode.java
+   11 src/main/java/simpleserver/util/SSConsts.java
+   19 src/main/java/simpleserver/util/SSProperties.java
+   29 src/main/java/simpleserver/util/SSPropertiesImpl.java
+   70 src/main/java/simpleserver/util/SSException.java
+   29 src/main/java/simpleserver/webserver/Session.java
+  289 src/main/java/simpleserver/webserver/Server.java
+   23 src/main/java/simpleserver/webserver/response/Response.java
+   43 src/main/java/simpleserver/webserver/response/LoginOkResponseImpl.java
+   43 src/main/java/simpleserver/webserver/response/ProductGroupsOkResponseImpl.java
+   41 src/main/java/simpleserver/webserver/response/ProductFailedResponseImpl.java
+   46 src/main/java/simpleserver/webserver/response/LoginFailedResponseImpl.java
+   42 src/main/java/simpleserver/webserver/response/ProductsFailedResponseImpl.java
+   42 src/main/java/simpleserver/webserver/response/SigninOkResponseImpl.java
+   46 src/main/java/simpleserver/webserver/response/SigninFailedResponseImpl.java
+   40 src/main/java/simpleserver/webserver/response/ProductGroupsFailedResponseImpl.java
+   57 src/main/java/simpleserver/webserver/response/ProductOkResponseImpl.java
+   58 src/main/java/simpleserver/webserver/response/ProductsOkResponseImpl.java
+   24 src/main/java/simpleserver/webserver/dto/LoginData.java
+   32 src/main/java/simpleserver/webserver/dto/SigninData.java
+   81 src/main/java/simpleserver/webserver/SessionImpl.java
+   27 src/main/java/simpleserver/Core.java
+ 1612 total
+```
+
+**Javascript:**
+
+```text
+$ find src -name "*.js" | xargs wc -l
+  126 src/userdb/users.js
+  108 src/domaindb/domain.js
+   10 src/core.js
+   33 src/util/prop.js
+   29 src/util/logger.js
+   79 src/webserver/session.js
+  289 src/webserver/server.js
+  674 total
+
+```
+
+**Clojure:**
+
+```text
+$ find src -name "*.clj" | xargs wc -l
+   65 src/simpleserver/userdb/users.clj
+   36 src/simpleserver/core.clj
+   80 src/simpleserver/domaindb/domain.clj
+   99 src/simpleserver/util/prop.clj
+   89 src/simpleserver/webserver/session.clj
+  243 src/simpleserver/webserver/server.clj
+  612 total
+
+```
+
+| Language      | Files  | LoC    |
+| ------------- |-------:| ------:|
+| Java          |     30 |   1612 |
+| Javascript    |      7 |    674 |
+| Clojure       |      6 |    612 |
+
+So, it's pretty clear that dynamic languages are easier to work with. 
+
 
 # Conclusions
 
