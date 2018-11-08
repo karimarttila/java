@@ -8,7 +8,6 @@
 - [Gradle](#gradle)
 - [Spring Boot 2.0 and Spring 5.0](#spring-boot-20-and-spring-50)
 - [SonarQube](#sonarqube)
-- [SonarQube](#sonarqube-1)
 - [IDE](#ide)
 - [Java Static Code Analysis](#java-static-code-analysis)
 - [Java REPL](#java-repl)
@@ -31,6 +30,8 @@
 # Introduction
 
 I have been programming Java some 20 years, so I didn't do this exercise to learn Java. I mainly wanted to implement the Simple Server using Java just to compare the Java implementation with previous [Clojure](https://github.com/karimarttila/clojure/tree/master/clj-ring-cljs-reagent-demo/simple-server) and [Javascript](https://github.com/karimarttila/javascript/tree/master/webstore-demo/simple-server) implementations and document my experiences between these three languages. Maybe later I will implement the Simple Server also using Python and Go. Another reason was to study the new Java 10 features. I would have used Java 11 but for some reason I couldn't make it work in Gradle - maybe trying to fix that later and upgrade to Java 11.
+
+I also wrote a bit more concise summary in my [Medium blog](https://medium.com/@kari.marttila/java-man-returns-home-confused-2fe951eb51a9) compared to the longer text you can find here in this readme.md.
 
 
 # Tools and Versions
