@@ -39,6 +39,12 @@ wrapper {
     gradleVersion = '4.10.2'
 }
 
+task copyMyCompileDeps(type: Copy) {
+    dependsOn build
+    from configurations.compileClasspath
+    into "$buildDir/compile-deps"
+}
+
 
 task printMyGradleVersion {
     doLast {
