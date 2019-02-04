@@ -25,7 +25,7 @@ apply plugin: 'io.spring.dependency-management'
 
 bootJar {
     baseName = 'simple-server'
-    version =  '0.1'
+    version =  '0.2'
 }
 
 repositories {
@@ -36,7 +36,7 @@ sourceCompatibility = 10
 targetCompatibility = 10
 
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.1.1'
 }
 
 task copyMyCompileDeps(type: Copy) {
@@ -46,11 +46,13 @@ task copyMyCompileDeps(type: Copy) {
 }
 
 
+// Does not work in Gradle 5 - Fix later.
 task printMyGradleVersion {
     doLast {
         final Jvm myJvmVersion = Jvm.current()
-        final GradleVersion myGradleVersion = GradleVersion.current()
-        println "Using JVM: ${myJvmVersion}, and Gradle: ${myGradleVersion.version}"
+        //final GradleVersion myGradleVersion = GradleVersion.current()
+        //println "Using JVM: ${myJvmVersion}, and Gradle: ${myGradleVersion.version}"
+        println "Using JVM: ${myJvmVersion}"
     }
 }
 

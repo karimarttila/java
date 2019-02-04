@@ -61,7 +61,7 @@ class ServerTest {
                 .andReturn();
 
         logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
-
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
@@ -114,6 +114,7 @@ class ServerTest {
                 .andExpect(jsonPath("$.ret").value("ok"))
                 .andExpect(jsonPath("$.msg").value("Credentials ok"))
                 .andReturn();
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
@@ -185,6 +186,7 @@ class ServerTest {
                 .andExpect(MockMvcResultMatchers.content().string(expectedResultJson))
                 .andReturn();
         logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
@@ -206,6 +208,7 @@ class ServerTest {
                 .andReturn();
 
         logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 
@@ -229,6 +232,7 @@ class ServerTest {
                 .andExpect(jsonPath("$.product[2]").value("Once Upon a Time in the West"))
                 .andReturn();
         logger.trace("Content: " + mvcResult.getResponse().getContentAsString());
+        logger.debug(SSConsts.LOG_EXIT);
     }
 
 }

@@ -13,7 +13,7 @@
 # Let's try version 10 (version 11 had some issues with Gradle).
 export JAVA_HOME=/mnt/local/openjdk-10
 echo "JAVA_HOME="$JAVA_HOME
-export GRADLE_HOME=/mnt/local/gradle-4.10.2
+export GRADLE_HOME=/mnt/local/gradle-5.1.1
 echo "GRADLE_HOME="$GRADLE_HOME
 export M2_HOME=/mnt/local/maven-3.5.4
 echo "M2_HOME="$M2_HOME
