@@ -10,8 +10,6 @@ buildscript {
     }
 }
 
-
-
 plugins {
   id "org.sonarqube" version "2.6.2"
 }
@@ -45,16 +43,15 @@ task copyMyCompileDeps(type: Copy) {
     into "$buildDir/compile-deps"
 }
 
-
 // Does not work in Gradle 5 - Fix later.
-task printMyGradleVersion {
-    doLast {
-        final Jvm myJvmVersion = Jvm.current()
-        //final GradleVersion myGradleVersion = GradleVersion.current()
-        //println "Using JVM: ${myJvmVersion}, and Gradle: ${myGradleVersion.version}"
-        println "Using JVM: ${myJvmVersion}"
-    }
-}
+//task printMyGradleVersion {
+//    doLast {
+//        final Jvm myJvmVersion = Jvm.current()
+//        //final GradleVersion myGradleVersion = GradleVersion.current()
+//        //println "Using JVM: ${myJvmVersion}, and Gradle: ${myGradleVersion.version}"
+//        println "Using JVM: ${myJvmVersion}"
+//    }
+//}
 
 
 ext{

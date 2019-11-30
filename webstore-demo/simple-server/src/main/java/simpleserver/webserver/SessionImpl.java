@@ -23,7 +23,7 @@ public class SessionImpl implements Session {
     /**
      * The Synchronized mySessions. Synchronized since Spring Services
      * are singletons by default (and hence not multi-thread safe)
-     * and class member variables need to be synchoronized
+     * and class member variables need to be synchronized
      * to be thread safe.
      */
     private final Set<String> mySessions = Collections.synchronizedSet(new HashSet<>());

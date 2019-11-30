@@ -5,6 +5,8 @@
 .idea/
 *.iml
 out/
+.settings/
+bin/
 
 # Generated jsdoc directory
 doc-gen/
@@ -23,3 +25,7 @@ personal-info/
 
 # Gradle build
 build/
+
+# IDEA files.
+.project
+.classpath
